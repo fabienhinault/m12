@@ -12,9 +12,28 @@ function pick(array) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    let buttonI = document.querySelector('#I');
+    let buttonM = document.querySelector('#M');
+    let buttonShuffle = document.querySelector('#shuffle');
+    let buttonReset = document.querySelector('#reset');
+    let buttons = [buttonShuffle, buttonReset];
+
+    class gameState{};
+    class gameStatePlay extends gameState {
+        function onEnter() {
+            buttonI.onClick = I;
+            buttonM.onClick = M;
+            buttons.forEach(b => b.removeAttr("disabled"));
+        }
+    }
+    class gameStateProgram extends gameState {
+        function onEnter() {
+            buttons.forEach(b => b.attr('disabled', 'disabled'));
+        }
     let numbers = range(12, 1);
     let divNumbers = document.querySelector('#numbers');
     divNumbers.innerHTML = numbers.join(' ');
+function beginAddProgrammed() {
 
 function I() {
     numbers = numbers.reverse();
@@ -30,8 +49,13 @@ function shuffle() {
         pick([I,M])();
     }
 }
+function reset() {
+    numbers = range(12, 1);
+    divNumbers.innerHTML = numbers.join(' ');
+}
 
     document.querySelector('#I').onclick = I;
     document.querySelector('#M').onclick = M; 
     document.querySelector('#shuffle').onclick = shuffle;
+    document.querySelector('#reset').onclick = reset;
 });
