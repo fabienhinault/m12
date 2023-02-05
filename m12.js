@@ -18,31 +18,29 @@ document.addEventListener('DOMContentLoaded', function() {
     let buttonReset = document.querySelector('#reset');
     let buttons = [buttonShuffle, buttonReset];
 
-    class gameState{};
-    class gameStatePlay extends gameState {
-        function onEnter() {
-            buttonI.onClick = I;
-            buttonM.onClick = M;
-            buttons.forEach(b => b.removeAttr("disabled"));
-        }
-    }
-    class gameStateProgram extends gameState {
-        function onEnter() {
-            buttons.forEach(b => b.attr('disabled', 'disabled'));
-        }
+
     let numbers = range(12, 1);
     let divNumbers = document.querySelector('#numbers');
+    let last;
     divNumbers.innerHTML = numbers.join(' ');
-function beginAddProgrammed() {
+    let inverses = {
+        'I': a => a.reverse(),
+        'M': a => permute(a, [0, 2, 4, 6, 8, 10, 11, 9, 7, 5, 3, 1])};
 
 function I() {
+    last = 'I';
     numbers = numbers.reverse();
     divNumbers.innerHTML = numbers.join(' ');
 }
 function M() {
-        numbers = permute(numbers, [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
-        divNumbers.innerHTML = numbers.join(' ');
+    last = 'M';
+    numbers = permute(numbers, [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
+    divNumbers.innerHTML = numbers.join(' ');
     }
+function undo() {
+    numbers = inverses[last](numbers);
+    divNumbers.innerHTML = numbers.join(' ');
+}
 function shuffle() {
     const nbTimes = getRandomInt(10,100);
     for(let iTime = 0; iTime < nbTimes; iTime++){
@@ -58,4 +56,5 @@ function reset() {
     document.querySelector('#M').onclick = M; 
     document.querySelector('#shuffle').onclick = shuffle;
     document.querySelector('#reset').onclick = reset;
+    document.querySelector('#undo').onclick = undo;
 });
