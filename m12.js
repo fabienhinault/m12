@@ -10,22 +10,48 @@ function getRandomInt(min, max) {
 function pick(array) {
     return array[getRandomInt(0, array.length)];
 }
+function makeMArray(n) {
+    let result = [];
+    for (let i = 0; i < n/2; i++) {
+        result[2 * i] = i;
+	const j = (2 * i) + 1;
+	if (j < n) {
+            result[j] = n - 1 - i;
+	}
+    }
+    return result;
+}
+
+function makeMInvArray(n){
+    let result = [];
+    for (let i = 0; i < n/2; i++) {
+        result[i] = 2 * i;
+	const j = (2 * i) + 1;
+	if (j < n) {
+            result[n - 1 - i] = j;
+	}
+    }
+    return result;
+}
 
 document.addEventListener('DOMContentLoaded', function() {
-    let buttonI = document.querySelector('#I');
-    let buttonM = document.querySelector('#M');
-    let buttonShuffle = document.querySelector('#shuffle');
-    let buttonReset = document.querySelector('#reset');
-    let buttons = [buttonShuffle, buttonReset];
+    const N = Number(new URL(window.location.toLocaleString()).searchParams.get('n')) || 12;
+    const arrayM = makeMArray(N);
+    const arrayMInv = makeMInvArray(N);
+    const buttonI = document.querySelector('#I');
+    const buttonM = document.querySelector('#M');
+    const buttonShuffle = document.querySelector('#shuffle');
+    const buttonReset = document.querySelector('#reset');
+    const buttons = [buttonShuffle, buttonReset];
 
 
-    let numbers = range(12, 1);
+    let numbers = range(N, 1);
     let divNumbers = document.querySelector('#numbers');
     let last;
     divNumbers.innerHTML = numbers.join(' ');
     let inverses = {
         'I': a => a.reverse(),
-        'M': a => permute(a, [0, 2, 4, 6, 8, 10, 11, 9, 7, 5, 3, 1])};
+        'M': a => permute(a, arrayMInv)};
 
 function I() {
     last = 'I';
@@ -34,7 +60,7 @@ function I() {
 }
 function M() {
     last = 'M';
-    numbers = permute(numbers, [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
+    numbers = permute(numbers, arrayM);
     divNumbers.innerHTML = numbers.join(' ');
     }
 function undo() {
