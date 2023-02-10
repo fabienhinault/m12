@@ -26,10 +26,10 @@ function makeMInvArray(n){
     let result = [];
     for (let i = 0; i < n/2; i++) {
         result[i] = 2 * i;
-	const j = (2 * i) + 1;
-	if (j < n) {
+        const j = (2 * i) + 1;
+        if (j < n) {
             result[n - 1 - i] = j;
-	}
+        }
     }
     return result;
 }
@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonI = document.querySelector('#I');
     const buttonM = document.querySelector('#M');
     const buttonShuffle = document.querySelector('#shuffle');
+    const inputShuffle = document.querySelector('#input_shuffle');
     const buttonReset = document.querySelector('#reset');
     const buttons = [buttonShuffle, buttonReset];
 
@@ -68,7 +69,18 @@ function undo() {
     divNumbers.innerHTML = numbers.join(' ');
 }
 function shuffle() {
-    const nbTimes = getRandomInt(10,100);
+    let nShuffle = Number(inputShuffle.value);
+    if (!nShuffle) {
+        shuffleDefault();
+    } else {
+        shuffleNTimes(nShuffle);
+    }
+}
+
+function shuffleDefault() {
+    shuffleNTimes(getRandomInt(10,100));
+}
+function shuffleNTimes(nbTimes) {
     for(let iTime = 0; iTime < nbTimes; iTime++){
         pick([I,M])();
     }
