@@ -34,6 +34,41 @@ function makeMInvArray(n){
     return result;
 }
 
+// function getcleanedLasts(lasts, n) {
+//     return lasts.replaceAll("II", "").replaceAll("","");
+// }
+// 
+// function updateSolutionPush(pushed, solution, cleanedLasts) {
+//     const previousLast = cleanedLasts[cleanedLasts.length - 1] || '';
+//     if (previousLast != pushed) {
+// 
+// 
+// }
+// 
+// function updateSolutionPop(solution, lasts) {
+// }
+
+function getIsInverseLength(isLength) {
+    return (2 - isLength) % 2;
+}
+
+function getMsInverseLength(n, msLength) {
+    return (n - 1 - msLength) % (n - 1);
+}
+
+function getGroupInverse(n, group) {
+    if (group.chatAt(0) === 'M') {
+        return 'M'.repeat(getMsInverseLength(n, group.length));
+    } else { // 'I'
+        return 'I'.repeat(getIsInverseLength(n, group.length));
+    }
+}
+
+function getSolution(n, lasts) {
+    const groups = lasts.split(/(?<=M)(?=I)/).map(s => s.split(/(?<=I)(?=M)/)).flat();
+    return groups.map(g => getGroupInverse(n, g)).reverse.join('');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const N = Number(new URL(window.location.toLocaleString()).searchParams.get('n')) || 12;
     const arrayM = makeMArray(N);
@@ -43,31 +78,49 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonShuffle = document.querySelector('#shuffle');
     const inputShuffle = document.querySelector('#input_shuffle');
     const buttonReset = document.querySelector('#reset');
+    const buttonUndo = document.querySelector('#undo');
+    const buttonSolution = document.querySelector('#btn_solution');
+    const spanSolution = document.querySelector('#solution');
+    const divNumbers = document.querySelector('#numbers');
     const buttons = [buttonShuffle, buttonReset];
 
 
     let numbers = range(N, 1);
-    let divNumbers = document.querySelector('#numbers');
-    let last;
+    let lasts = [];
+    let solution = [];
     divNumbers.innerHTML = numbers.join(' ');
     let inverses = {
         'I': a => a.reverse(),
-        'M': a => permute(a, arrayMInv)};
+        'M': a => permute(a, arrayMInv)
+    };
+
+function pushLasts(last) {
+    lasts.push(last);
+}
+
+function popLasts() {
+    return lasts.pop();
+}
+
+function setNumbers(newNumbers) {
+    numbers = newNumbers;
+    divNumbers.innerHTML = numbers.join(' ');
+}
 
 function I() {
-    last = 'I';
-    numbers = numbers.reverse();
-    divNumbers.innerHTML = numbers.join(' ');
+    lasts.push('I');
+    setNumbers(numbers.reverse());
 }
+
 function M() {
-    last = 'M';
-    numbers = permute(numbers, arrayM);
-    divNumbers.innerHTML = numbers.join(' ');
-    }
-function undo() {
-    numbers = inverses[last](numbers);
-    divNumbers.innerHTML = numbers.join(' ');
+    lasts.push('M');
+    setNumbers(permute(numbers, arrayM));
 }
+
+function undo() {
+    setNumbers(inverses[lasts.pop()](numbers));
+}
+
 function shuffle() {
     let nShuffle = Number(inputShuffle.value);
     if (!nShuffle) {
@@ -90,9 +143,15 @@ function reset() {
     divNumbers.innerHTML = numbers.join(' ');
 }
 
-    document.querySelector('#I').onclick = I;
-    document.querySelector('#M').onclick = M; 
-    document.querySelector('#shuffle').onclick = shuffle;
-    document.querySelector('#reset').onclick = reset;
-    document.querySelector('#undo').onclick = undo;
+function showSolution() {
+    spanSolution.innerHTML = getSolution(N, lasts);
+}
+    
+
+    buttonI.onclick = I;
+    buttonM.onclick = M; 
+    buttonShuffle.onclick = shuffle;
+    buttonReset.onclick = reset;
+    buttonUndo.onclick = undo;
+    buttonSolution.onclick = showSolution;
 });
