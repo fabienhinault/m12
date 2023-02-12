@@ -47,26 +47,34 @@ function makeMInvArray(n){
 // 
 // function updateSolutionPop(solution, lasts) {
 // }
+function getComplementModulo(i, n) {
+    let result = (n - i) % n;
+    if (result < 0) {
+        result += n;
+    }
+    return result;
+}
+
 
 function getIsInverseLength(isLength) {
-    return (2 - isLength) % 2;
+    return getComplementModulo(isLength, 2);
 }
 
 function getMsInverseLength(n, msLength) {
-    return (n - 1 - msLength) % (n - 1);
+    return getComplementModulo(msLength, n- 1);
 }
 
 function getGroupInverse(n, group) {
-    if (group.chatAt(0) === 'M') {
+    if (group.charAt(0) === 'M') {
         return 'M'.repeat(getMsInverseLength(n, group.length));
     } else { // 'I'
-        return 'I'.repeat(getIsInverseLength(n, group.length));
+        return 'I'.repeat(getIsInverseLength(group.length));
     }
 }
 
 function getSolution(n, lasts) {
     const groups = lasts.split(/(?<=M)(?=I)/).map(s => s.split(/(?<=I)(?=M)/)).flat();
-    return groups.map(g => getGroupInverse(n, g)).reverse.join('');
+    return groups.map(g => getGroupInverse(n, g)).reverse().join('');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -139,12 +147,12 @@ function shuffleNTimes(nbTimes) {
     }
 }
 function reset() {
-    numbers = range(12, 1);
-    divNumbers.innerHTML = numbers.join(' ');
+    setNumbers(range(12, 1));
+    lasts=[];
 }
 
 function showSolution() {
-    spanSolution.innerHTML = getSolution(N, lasts);
+    spanSolution.innerHTML = getSolution(N, lasts.join(''));
 }
     
 
