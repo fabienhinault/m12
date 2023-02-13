@@ -80,7 +80,7 @@ function getGroupInverse(n, group) {
 }
 
 function getSolution(n, lasts) {
-    return getCleanedLasts(lasts)
+    return getCleanedLasts(lasts, n)
         .split(/(?<=M)(?=I)/)
         .map(s => s.split(/(?<=I)(?=M)/))
         .flat()

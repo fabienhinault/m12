@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let numbers = range(N, 1);
     let lasts = [];
     let solution = [];
+    let showSolution = false;
     divNumbers.innerHTML = numbers.join(' ');
     let inverses = {
         'I': a => a.reverse(),
@@ -35,7 +36,7 @@ function popLasts() {
 
 function setNumbers(newNumbers) {
     numbers = newNumbers;
-    divNumbers.innerHTML = numbers.join(' ');
+    return document.dispatchEvent(new CustomEvent("numbers changed", {details: {numbers: newNumbers}}));
 }
 
 function I() {
@@ -64,11 +65,13 @@ function shuffle() {
 function shuffleDefault() {
     shuffleNTimes(getRandomInt(10,100));
 }
+
 function shuffleNTimes(nbTimes) {
     for(let iTime = 0; iTime < nbTimes; iTime++){
         pick([I,M])();
     }
 }
+
 function reset() {
     setNumbers(range(12, 1));
     lasts=[];
@@ -76,8 +79,7 @@ function reset() {
 
 function showSolution() {
     spanSolution.innerHTML = getSolution(N, lasts.join(''));
-}
-    
+}    
 
     buttonI.onclick = I;
     buttonM.onclick = M; 
@@ -85,4 +87,11 @@ function showSolution() {
     buttonReset.onclick = reset;
     buttonUndo.onclick = undo;
     buttonSolution.onclick = showSolution;
+    
+
+    document.addEventListener('numbers changed',
+        evt => {
+            let numbers = evt.details.numbers;
+            divNumbers.innerHTML = numbers.join(' ');
+            
 });
