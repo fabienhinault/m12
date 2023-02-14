@@ -26,31 +26,48 @@ document.addEventListener('DOMContentLoaded', function() {
         'M': a => permute(a, arrayMInv)
     };
 
+function dispatchLastsChanged() {
+    return document.dispatchEvent(new CustomEvent("lasts changed", {detail: {lasts: lasts}}));
+}
+
 function pushLasts(last) {
     lasts.push(last);
+    return dispatchLastsChanged();
 }
 
 function popLasts() {
-    return lasts.pop();
+    let popped = lasts.pop();
+    dispatchLastsChanged();
+    return popped;
+}
+
+function setLasts(newlasts) {
+    lasts = newLasts
+    return dispatchLastsChanged();
 }
 
 function setNumbers(newNumbers) {
     numbers = newNumbers;
-    return document.dispatchEvent(new CustomEvent("numbers changed", {details: {numbers: newNumbers}}));
+    return document.dispatchEvent(new CustomEvent("numbers changed", {detail: {numbers: newNumbers}}));
+}
+
+function updateSolution() {
+    solution = getSolution(N, lasts.join(''));
+    return document.dispatchEvent(new CustomEvent("solution changed", {detail: {solution: solution}}));
 }
 
 function I() {
-    lasts.push('I');
+    pushLasts('I');
     setNumbers(numbers.reverse());
 }
 
 function M() {
-    lasts.push('M');
+    pushLasts('M');
     setNumbers(permute(numbers, arrayM));
 }
 
 function undo() {
-    setNumbers(inverses[lasts.pop()](numbers));
+    setNumbers(inverses[popLasts](numbers));
 }
 
 function shuffle() {
@@ -74,24 +91,48 @@ function shuffleNTimes(nbTimes) {
 
 function reset() {
     setNumbers(range(12, 1));
-    lasts=[];
+    setLasts([]);
 }
 
-function showSolution() {
-    spanSolution.innerHTML = getSolution(N, lasts.join(''));
+function toggleSolution() {
+    showSolution = !showSolution;
+    if (showSolution) {
+        toggleOnSolution();
+        updateSolution(); 
+    } else {
+        spanSolution.innerHTML = '' 
+        toggleOffSolution();
+    }
 }    
+
+function toggleOffSolution() {
+    document.removeEventListener('solution changed', updateSpanSolution);
+}
+
+function updateSpanSolution(evt) {
+    spanSolution.innerHTML = evt.detail.solution;
+}
+
+function toggleOnSolution() {
+    document.addEventListener('solution changed', updateSpanSolution);
+}
 
     buttonI.onclick = I;
     buttonM.onclick = M; 
     buttonShuffle.onclick = shuffle;
     buttonReset.onclick = reset;
     buttonUndo.onclick = undo;
-    buttonSolution.onclick = showSolution;
+    buttonSolution.onclick = toggleSolution;
     
 
     document.addEventListener('numbers changed',
         evt => {
-            let numbers = evt.details.numbers;
+            let numbers = evt.detail.numbers;
             divNumbers.innerHTML = numbers.join(' ');
-            
+        });          
+
+    document.addEventListener('lasts changed',
+        evt => {
+            updateSolution();
+        });
 });
