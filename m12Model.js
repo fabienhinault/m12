@@ -11,8 +11,12 @@ class Model {
             'I': a => a.reverse(),
 	    'M': a => permute(a, this.arrayMInv)
 	};
-
+        this.shortcuts = [];
         this.dispatcher.addEventListener('lasts changed', evt => {this.updateSolution();});
+    }
+
+    dispatch(type, detail) {
+        return this.dispatcher.dispatchEvent(new CustomEvent(type, {detail: detail}));
     }
 
     dispatchLastsChanged() {
@@ -80,6 +84,19 @@ class Model {
     reset() {
         this.setNumbers(range(this.N, 1));
         this.setLasts([]);
+    }
+
+    addShortcut(name, strAction) {
+        let shortcut = {name, strAction};
+        shortcuts.push(shortcut);
+        dispatch("added shortcut", shortcut);
+    }
+
+    playShortcut(strShortcutAction) {
+       for(const c of strShortcutAction) {
+           if (!["I","M"].contains(c)) {throw new Error("invalid shortcut");}
+           this[c]();
+       }
     }
             
 };

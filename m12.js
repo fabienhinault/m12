@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputShortcut = document.querySelector('#input_shortcut');
     const buttonShuffle = document.querySelector('#shuffle');
     const inputShuffle = document.querySelector('#input_shuffle');
+    const spanDefShortcut = document.querySelector('#def_shortcut');
     const buttonReset = document.querySelector('#reset');
     const buttonUndo = document.querySelector('#undo');
     const buttonSolution = document.querySelector('#btn_solution');
@@ -27,8 +28,20 @@ document.addEventListener('DOMContentLoaded', function() {
         buttonI.onClick = plusI;
         buttonM.onClick = plusM;
         buttons.each(b => b.disabled = true);
-        inputShortcut.style["visibility"] = "visible";
-        buttonSaveShortcut.style["visibility"] = "visible";
+        spanDefShortcut.style["visibility"] = "visible";
+    }
+
+    function toggleOffAddShortcut() {
+        addingShortcut = false;
+        buttonI.onClick = () => model.I();
+        buttonM.onClick = () => model.M();
+        buttons.each(b => b.disabled = false);
+        spanDefShortcut.style["visibility"] = "collapse";
+    }
+
+    function plusI() {
+        strAction += "I";
+
     }
 
 function toggleSolution() {
