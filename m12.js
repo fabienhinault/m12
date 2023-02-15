@@ -6,9 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document);
 
     let showSolution = false;
+    let addingShortcut = false;
 
     const buttonI = document.querySelector('#I');
     const buttonM = document.querySelector('#M');
+    const buttonPlus = document.querySelector('#plus');
+    const buttonSaveShortcut = document.querySelector('#save_shortcut');
+    const inputShortcut = document.querySelector('#input_shortcut');
     const buttonShuffle = document.querySelector('#shuffle');
     const inputShuffle = document.querySelector('#input_shuffle');
     const buttonReset = document.querySelector('#reset');
@@ -16,8 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonSolution = document.querySelector('#btn_solution');
     const spanSolution = document.querySelector('#solution');
     const divNumbers = document.querySelector('#numbers');
-    const buttons = [buttonShuffle, buttonReset];
+    const buttons = [buttonShuffle, buttonReset, buttonUndo, buttonPlus];
 
+    function toggleOnAddShortcut() {
+        addingShortcut = true;
+        buttonI.onClick = plusI;
+        buttonM.onClick = plusM;
+        buttons.each(b => b.disabled = true);
+        inputShortcut.style["visibility"] = "visible";
+        buttonSaveShortcut.style["visibility"] = "visible";
+    }
 
 function toggleSolution() {
     showSolution = !showSolution;
