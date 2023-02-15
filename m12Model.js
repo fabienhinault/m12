@@ -1,0 +1,87 @@
+class Model {
+    constructor(n, evtDispatcher) {
+        this.N = n;
+	this.dispatcher = evtDispatcher;
+	this.arrayM = makeMArray(this.N);
+	this.arrayMInv = makeMInvArray(this.N);
+	this.numbers = range(this.N, 1);
+	this.lasts = [];
+	this.solution = [];
+	this.inverses = {
+            'I': a => a.reverse(),
+	    'M': a => permute(a, this.arrayMInv)
+	};
+
+        this.dispatcher.addEventListener('lasts changed', evt => {this.updateSolution();});
+    }
+
+    dispatchLastsChanged() {
+        return this.dispatcher.dispatchEvent(new CustomEvent("lasts changed", {detail: {lasts: this.lasts}}));
+    }
+
+    pushLasts(last) {
+        this.lasts.push(last);
+        return this.dispatchLastsChanged();
+    }
+
+    popLasts() {
+        let popped = this.lasts.pop();
+        this.dispatchLastsChanged();
+        return popped;
+    }
+
+    setLasts(newLasts) {
+        this.lasts = newLasts
+        return this.dispatchLastsChanged();
+    }
+
+    setNumbers(newNumbers) {
+        this.numbers = newNumbers;
+        return this.dispatcher.dispatchEvent(new CustomEvent("numbers changed", {detail: {numbers: newNumbers}}));
+    }
+
+    updateSolution() {
+        this.solution = getSolution(this.N, this.lasts.join(''));
+        return this.dispatcher.dispatchEvent(new CustomEvent("solution changed", {detail: {solution: this.solution}}));
+    }
+
+    I() {
+        this.pushLasts('I');
+        this.setNumbers(this.numbers.reverse());
+    }
+
+    M() {
+        this.pushLasts('M');
+        this.setNumbers(permute(this.numbers, this.arrayM));
+    }
+
+    undo() {
+        this.setNumbers(this.inverses[this.popLasts()](this.numbers));
+    }
+
+    shuffle(nShuffle) {
+        if (!nShuffle) {
+            this.shuffleDefault();
+        } else {
+            this.shuffleNTimes(nShuffle);
+        }
+    }
+
+    shuffleDefault() {
+        this.shuffleNTimes(getRandomInt(10,100));
+    }
+
+    shuffleNTimes(nbTimes) {
+        for(let iTime = 0; iTime < nbTimes; iTime++){
+            pick([() => this.I(), () => this.M()])();
+        }
+    }
+
+    reset() {
+        this.setNumbers(range(this.N, 1));
+        this.setLasts([]);
+    }
+            
+};
+
+    
