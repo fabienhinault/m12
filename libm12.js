@@ -110,5 +110,6 @@ function getNameFromAction(strAction) {
         .flat()
         .map(str => str.length.toString() + str.charAt(0))
         .join('');
+}
 
 // export {range, permute, getRandomInt, pick, makeMArray, makeMInvArray, getComplementModulo, getIsInverseLength, getMsInverseLength, getGroupInverse, getSolution};

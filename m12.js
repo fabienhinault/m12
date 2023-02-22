@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function saveShortcut() {
         model.saveCurrentShortcut(inputShortcut.value);
-
+        toggleOffAddShortcut();
+    }
 function toggleSolution() {
     showSolution = !showSolution;
     if (showSolution) {
@@ -80,7 +81,7 @@ function toggleOnSolution() {
     buttonUndo.onclick = () => model.undo();
     buttonSolution.onclick = () => toggleSolution();
     buttonPlus.onclick = toggleOnAddShortcut();
-    buttonSave.onclick = saveShortcut();
+    buttonSaveShortcut.onclick = saveShortcut();
 
     document.addEventListener('numbers changed',
         evt => {

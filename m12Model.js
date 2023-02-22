@@ -3,6 +3,7 @@ class Shortcut {
         this.name = "";
         this.action = "";
         this.nameWasSet = false;
+        this.dispatcher = evtDispatcher;
     }
 
     dispatch(type, detail) {
@@ -47,7 +48,7 @@ class Model {
             'I': a => a.reverse(),
 	    'M': a => permute(a, this.arrayMInv)
 	};
-        this.shorcuts = [];
+        this.shortcuts = [];
         this.dispatcher.addEventListener('lasts changed', evt => {this.updateSolution();});
         this.currentShortcut = new Shortcut(evtDispatcher);
     }
