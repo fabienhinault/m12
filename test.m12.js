@@ -30,4 +30,9 @@ describe('Table', function() {
             chai.assert.equal(toNext("MMMM"), "IIIII");
         });
     });
+    describe('isClean', function() {
+        it('isClean', function () {
+            chai.assert.isTrue(isClean("I", 12));
+        });
+    });
 });
