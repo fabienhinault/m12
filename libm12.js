@@ -103,5 +103,12 @@ function getSolution(n, lasts) {
         .join('');
 }
 
+function getNameFromAction(strAction) {
+    return strAction
+        .split(/(?<=M)(?=I)/)
+        .map(s => s.split(/(?<=I)(?=M)/))
+        .flat()
+        .map(str => str.length.toString() + str.charAt(0))
+        .join('');
 
 // export {range, permute, getRandomInt, pick, makeMArray, makeMInvArray, getComplementModulo, getIsInverseLength, getMsInverseLength, getGroupInverse, getSolution};

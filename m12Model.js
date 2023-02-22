@@ -1,3 +1,39 @@
+class Shortcut {
+    constructor(evtDispatcher) {
+        this.name = "";
+        this.action = "";
+        this.nameWasSet = false;
+    }
+
+    dispatch(type, detail) {
+        return this.dispatcher.dispatchEvent(new CustomEvent(type, {detail: detail}));
+    }
+
+    dispatchChanged() {
+        this.dispatch("currentShortcut changed", this.currentShortcut);
+    }
+    
+    add(str) {
+        this.currentShortcut.action += str;
+        if (!this.nameWasSet) {
+            this.updateName()
+        }
+        this.dispatchCurrentShortcutChanged();
+    }
+    
+    setName(name) {
+        if (this.currentShortcut.name !== name) {
+            this.currentShortcut.nameSet = true;
+            this.currentShortcut.name = name;
+        }
+    }
+
+    updateName() {
+        this.name = getNameFromAction(this.action);
+    }
+}
+
+
 class Model {
     constructor(n, evtDispatcher) {
         this.N = n;
@@ -11,12 +47,24 @@ class Model {
             'I': a => a.reverse(),
 	    'M': a => permute(a, this.arrayMInv)
 	};
-        this.shortcuts = [];
+        this.shorcuts = [];
         this.dispatcher.addEventListener('lasts changed', evt => {this.updateSolution();});
+        this.currentShortcut = new Shortcut(evtDispatcher);
     }
 
     dispatch(type, detail) {
         return this.dispatcher.dispatchEvent(new CustomEvent(type, {detail: detail}));
+    }
+
+    reinitCurrentShortcut() {
+        this.currentShortcut = new Shortcut(this.dispatcher);
+        this.currentShortcut.dispatchChanged();
+    }
+
+    saveCurrentShortcut(name) {
+        this.shortcuts.push({...this.currentShortcut, name});
+        this.dispatch("shortcuts changed", this.shortcuts);
+        this.reinitCurrentShortcut();
     }
 
     dispatchLastsChanged() {

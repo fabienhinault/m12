@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         addingShortcut = true;
         buttonI.onClick = plusI;
         buttonM.onClick = plusM;
-        buttons.each(b => b.disabled = true);
+        buttons.forEach(b => b.disabled = true);
         spanDefShortcut.style["visibility"] = "visible";
     }
 
@@ -35,14 +35,20 @@ document.addEventListener('DOMContentLoaded', function() {
         addingShortcut = false;
         buttonI.onClick = () => model.I();
         buttonM.onClick = () => model.M();
-        buttons.each(b => b.disabled = false);
+        buttons.forEach(b => b.disabled = false);
         spanDefShortcut.style["visibility"] = "collapse";
     }
 
     function plusI() {
-        strAction += "I";
-
+        model.currentShortcut.add("I");
     }
+
+    function plusM() {
+        model.currentShortcut.add("M");
+    }
+
+    function saveShortcut() {
+        model.saveCurrentShortcut(inputShortcut.value);
 
 function toggleSolution() {
     showSolution = !showSolution;
@@ -73,7 +79,8 @@ function toggleOnSolution() {
     buttonReset.onclick = () => model.reset();
     buttonUndo.onclick = () => model.undo();
     buttonSolution.onclick = () => toggleSolution();
-    
+    buttonPlus.onclick = toggleOnAddShortcut();
+    buttonSave.onclick = saveShortcut();
 
     document.addEventListener('numbers changed',
         evt => {
@@ -82,4 +89,5 @@ function toggleOnSolution() {
         });          
 
     model.reset();
+    toggleOffAddShortcut();
 });
