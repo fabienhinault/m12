@@ -1,15 +1,25 @@
 function range(size, startAt = 0) {
     return [...Array(size).keys()].map(i => i + startAt);
 }
+
 function permute(array, permutation) {
     return permutation.map(permutationIndex => array[permutationIndex]);
 }
+
+function getPermutationInverse(permutedArray) {
+    let result = [];
+    permutedArray.forEach((element, index) => {result[element - 1] = index + 1;});
+    return result;
+}
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
+
 function pick(array) {
     return array[getRandomInt(0, array.length)];
 }
+
 function makeMArray(n) {
     let result = [];
     for (let i = 0; i < n/2; i++) {
