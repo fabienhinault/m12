@@ -44,7 +44,11 @@ function getCleanedLasts(lasts, n) {
     } while (newResult !== result);
     return result;
 }
- 
+
+function isClean(str, n) {
+    return str.indexOf('M'.repeat(n - 1)) === -1 && str.indexOf("II") === -1;
+}
+
 // function updateSolutionPush(pushed, solution, cleanedLasts) {
 //     const previousLast = cleanedLasts[cleanedLasts.length - 1] || '';
 //     if (previousLast != pushed) {
