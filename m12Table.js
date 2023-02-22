@@ -14,3 +14,30 @@ function* allMIs(maxLength) {
         yield last;
     }
 }
+
+const arrayM = makeMArray(12);
+
+function applyI(numbers){
+    return numbers.reverse();
+}
+
+const permutations = {
+    I: numbers => numbers.reverse(),
+    M: numbers => permute(numbers, arrayM)
+};
+
+function applyString(str, numbers) {
+    let result = [...numbers];
+    for (const c of str) {
+        result = permutations[c](result);
+    }
+    return result;
+}
+
+const A = range(12, 1);
+for (const str of allMIs(5)) {
+    if (isClean(str, 12)) {
+        const res = applyString(str, A);
+        console.log(str + "   " + res + "   " + getPermutationInverse(res));
+    }
+}
