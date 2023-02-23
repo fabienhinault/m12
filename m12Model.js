@@ -15,17 +15,17 @@ class Shortcut {
     }
     
     add(str) {
-        this.currentShortcut.action += str;
+        this.action += str;
         if (!this.nameWasSet) {
             this.updateName()
         }
-        this.dispatchCurrentShortcutChanged();
+        this.dispatchChanged();
     }
     
     setName(name) {
-        if (this.currentShortcut.name !== name) {
-            this.currentShortcut.nameSet = true;
-            this.currentShortcut.name = name;
+        if (this.name !== name) {
+            this.nameWasSet = true;
+            this.name = name;
         }
     }
 
@@ -107,6 +107,16 @@ class Model {
         this.pushLasts('M');
         this.setNumbers(permute(this.numbers, this.arrayM));
     }
+
+    function applyString(str) {
+        for (const c of str) {
+            if (c !== 'I' && c !== 'M') {
+                throw new Error("invalid argument");
+            }
+            this[c]();
+        }
+    }
+
 
     undo() {
         this.setNumbers(this.inverses[this.popLasts()](this.numbers));

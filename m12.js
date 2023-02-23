@@ -11,8 +11,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonI = document.querySelector('#I');
     const buttonM = document.querySelector('#M');
     const buttonPlus = document.querySelector('#plus');
+    const divShortcuts = document.querySelector('#shortcuts');
     const buttonSaveShortcut = document.querySelector('#save_shortcut');
     const inputShortcut = document.querySelector('#input_shortcut');
+    const inputShortcutName = document.querySelector('#input_shortcut_name');
+
     const buttonShuffle = document.querySelector('#shuffle');
     const inputShuffle = document.querySelector('#input_shuffle');
     const spanDefShortcut = document.querySelector('#def_shortcut');
@@ -25,16 +28,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function toggleOnAddShortcut() {
         addingShortcut = true;
-        buttonI.onClick = plusI;
-        buttonM.onClick = plusM;
+        buttonI.onclick = plusI;
+        buttonM.onclick = plusM;
         buttons.forEach(b => b.disabled = true);
         spanDefShortcut.style["visibility"] = "visible";
     }
 
     function toggleOffAddShortcut() {
         addingShortcut = false;
-        buttonI.onClick = () => model.I();
-        buttonM.onClick = () => model.M();
+        buttonI.onclick = () => model.I();
+        buttonM.onclick = () => model.M();
         buttons.forEach(b => b.disabled = false);
         spanDefShortcut.style["visibility"] = "collapse";
     }
@@ -48,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function saveShortcut() {
-        model.saveCurrentShortcut(inputShortcut.value);
+        model.saveCurrentShortcut(inputShortcutName.value);
         toggleOffAddShortcut();
     }
 function toggleSolution() {
@@ -80,14 +83,29 @@ function toggleOnSolution() {
     buttonReset.onclick = () => model.reset();
     buttonUndo.onclick = () => model.undo();
     buttonSolution.onclick = () => toggleSolution();
-    buttonPlus.onclick = toggleOnAddShortcut();
-    buttonSaveShortcut.onclick = saveShortcut();
+    buttonPlus.onclick = toggleOnAddShortcut;
+    buttonSaveShortcut.onclick = saveShortcut;
 
     document.addEventListener('numbers changed',
         evt => {
             let numbers = evt.detail.numbers;
             divNumbers.innerHTML = numbers.join(' ');
-        });          
+        });
+    document.addEventListener('shortcuts changed',
+        evt => {
+            divShortcuts.innerHTML = 
+                model.shortcuts
+                .map(shortcut => `<button> ${shortcut.name}</button>`)
+                .join(' '); 
+            divShortcuts.children.forEach(
+                btn => { btn.onclick = () => model.apply
+        });
+
+    document.addEventListener('currentShortcut changed',
+        evt => {
+            inputShortcut.value = model.currentShortcut.action;
+            inputShortcutName.value = model.currentShortcut.name;
+        });
 
     model.reset();
     toggleOffAddShortcut();
