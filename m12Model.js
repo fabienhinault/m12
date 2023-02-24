@@ -108,13 +108,27 @@ class Model {
         this.setNumbers(permute(this.numbers, this.arrayM));
     }
 
-    function applyString(str) {
+    applyString(str) {
         for (const c of str) {
             if (c !== 'I' && c !== 'M') {
                 throw new Error("invalid argument");
             }
             this[c]();
         }
+    }
+
+    applyShortcut(i) {
+        this.applyString(this.shortcuts[i].action);
+    }
+
+    applyStringToShortcut(str) {
+        for (const c of str) {
+            this.currentShortcut.add(c);
+        }
+    }
+
+    applyShortcutToShortcut(i) {
+        this.applyStringToShortcut(this.shortcuts[i].action);
     }
 
 

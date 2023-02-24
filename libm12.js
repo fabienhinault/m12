@@ -93,22 +93,27 @@ function getGroupInverse(n, group) {
     }
 }
 
+function split(str) {
+    return str.split(/(?<=M)(?=I)/).map(s => s.split(/(?<=I)(?=M)/)).flat();
+}
+
 function getSolution(n, lasts) {
-    return getCleanedLasts(lasts, n)
-        .split(/(?<=M)(?=I)/)
-        .map(s => s.split(/(?<=I)(?=M)/))
-        .flat()
+    return split(getCleanedLasts(lasts, n))
         .map(g => getGroupInverse(n, g))
         .reverse()
         .join('');
 }
 
+function if1thenEmpty(str) {
+    if (str === "1") {
+        return "";
+    }
+    return str;
+}
+
 function getNameFromAction(strAction) {
-    return strAction
-        .split(/(?<=M)(?=I)/)
-        .map(s => s.split(/(?<=I)(?=M)/))
-        .flat()
-        .map(str => str.length.toString() + str.charAt(0))
+    return split(strAction)
+        .map(str => if1thenEmpty(str.length.toString()) + str.charAt(0))
         .join('');
 }
 

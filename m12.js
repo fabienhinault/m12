@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', function() {
         addingShortcut = true;
         buttonI.onclick = plusI;
         buttonM.onclick = plusM;
+        divShortcuts.childNodes.forEach(
+            (btn, i) => {
+                btn.onclick = () => model.applyShortcutToShortcut(i);
+            });
         buttons.forEach(b => b.disabled = true);
         spanDefShortcut.style["visibility"] = "visible";
     }
@@ -96,9 +100,9 @@ function toggleOnSolution() {
             divShortcuts.innerHTML = 
                 model.shortcuts
                 .map(shortcut => `<button> ${shortcut.name}</button>`)
-                .join(' '); 
-            divShortcuts.children.forEach(
-                btn => { btn.onclick = () => model.apply
+                .join(''); 
+            divShortcuts.childNodes.forEach(
+                (btn, i)  => { btn.onclick = () => model.applyString(model.shortcuts[i].action)});
         });
 
     document.addEventListener('currentShortcut changed',
