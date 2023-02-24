@@ -35,9 +35,11 @@ function applyString(str, numbers) {
 }
 
 const A = range(12, 1);
-for (const str of allMIs(5)) {
+let map = {};
+for (const str of allMIs(13)) {
     if (isClean(str, 12)) {
         const res = applyString(str, A);
-        console.log(str + "   " + res + "   " + getPermutationInverse(res));
+        map[res] = str;
+        console.log(str + "   " + res + "   " + map[getPermutationInverse(res)]);
     }
 }
