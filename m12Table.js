@@ -34,12 +34,25 @@ function applyString(str, numbers) {
     return result;
 }
 
-const A = range(12, 1);
+const A = range(12, 0);
 let map = {};
 for (const str of allMIs(13)) {
     if (isClean(str, 12)) {
         const res = applyString(str, A);
         map[res] = str;
-        console.log(str + "   " + res + "   " + map[getPermutationInverse(res)]);
+        let cycles = getCycles(res);
+        console.log(str + 
+            "   " + 
+            res + 
+            "   " + 
+            Math.max.apply(null, cycles.map(c => c.length)) +
+            "   " + 
+            getInvariants(cycles) + 
+            "   " + 
+            cycles.length +
+            "   " +
+            cycles.map(c => c.join(",")).join("  ") + 
+            "   " + 
+            map[getPermutationInverseRaw(res)]);
     }
 }

@@ -1,7 +1,12 @@
 describe('libm12', function () {
     describe('getSolution', function () {
-        it('should return -1 when the value is not present', function () {
-        chai.assert.equal(getSolution(12, "IMMMMMMMMMMMI"), "");
+        it('should return ""  when the value is IMMMMMMMMMMMI', function () {
+            chai.assert.equal(getSolution(12, "IMMMMMMMMMMMI"), "");
+        });
+    });
+    describe('makeMArray', function () {
+        it('should return ...  when the value is 12', function () {
+            chai.assert.deepEqual(makeMArray(12), [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
         });
     });
 });
