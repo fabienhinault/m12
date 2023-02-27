@@ -27,7 +27,7 @@ function pick(array) {
     return array[getRandomInt(0, array.length)];
 }
 
-class frame {
+class Frame {
     constructor(n) {
         this.N = n;
         this.mArray = makeMArray(n);
@@ -43,7 +43,7 @@ class frame {
     }
 }
 
-class transform {
+class Transform {
     constructor(miString, frame) {
         this.miString = miSring;
         this.frame = frame;
