@@ -186,4 +186,33 @@ function getCycleFrom(rawNumbers, start, lookedNumbers) {
     return cycle;
 }
 
+function getStartString(len){
+    // all strings from "IIII..." to "IMIM..." are dirty
+    return "IM".repeat(len).substring(0, len);
+}
+
+function toNext(str, n) {
+    const iLastI = str.lastIndexOf("I");
+    if (iLastI === -1) {
+        return getStartString(str.length + 1);
+    } else {
+        const next = str.substring(0, iLastI) + "M" + 
+            getStartString(str.length - iLastI - 1);
+        const iMs = next.indexOf('M'.repeat(n - 1));
+        if (iMs === -1) {
+            return next;
+        } else {
+            return toNext(next.substring(0, iMs) + "M".repeat(next.length - iMs), n);
+        }
+    }
+}
+
+function* allMIs(minLength, maxLength, n) {
+    last = getStartString(minLength);
+    while (last.length < maxLength) {
+        yield last;
+        last = toNext(last, n);
+    }
+}
+
 // export {range, permute, getRandomInt, pick, makeMArray, makeMInvArray, getComplementModulo, getIsInverseLength, getMsInverseLength, getGroupInverse, getSolution};

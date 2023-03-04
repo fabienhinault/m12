@@ -1,22 +1,3 @@
-function toNext(str) {
-    const lastI = str.lastIndexOf("I");
-    if (lastI === -1) {
-	// all strings from "IIII..." to "IMIM..." are dirty
-        return "IM".repeat(str.length + 1).substring(0, str.length + 1) ;
-    } else {
-        return str.substring(0, lastI) + "M" + 
-            "IM".repeat(str.length).substring(0, str.length - lastI - 1);
-    }
-}
-
-function* allMIs(last, maxLength) {
-    last = toNext(last);
-    while (last.length < maxLength) {
-        yield last;
-        last = toNext(last);
-    }
-}
-
 const arrayM = makeMArray(12);
 
 function applyI(numbers){
@@ -40,7 +21,7 @@ const A = range(12, 0);
 let map = {};
 
 function compute(startString, intMaxSize) {
-    for (const str of allMIs(startString, intMaxSize)) {
+    for (const str of allMIs(startString, intMaxSize, 12)) {
         if (isClean(str, 12)) {
             let name = getNameFromAction(str); 
             console.log(name);
@@ -61,6 +42,6 @@ function compute(startString, intMaxSize) {
     }
 }
 let start = Date.now();
-compute("", 23);
+compute("", 24);
 console.log(Date.now() - start);
 

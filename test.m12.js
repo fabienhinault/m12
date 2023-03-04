@@ -6,32 +6,28 @@ describe('libm12', function () {
     });
     describe('makeMArray', function () {
         it('should return ...  when the value is 12', function () {
-            chai.assert.deepEqual(makeMArray(12), [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
+            chai.assert.deepEqual(makeMArray(12), 
+                [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
         });
     });
-});
-
-describe('Table', function() {
     describe('toNext', function() {
         it('', function () {
-            chai.assert.equal(toNext(""), "I");
-            chai.assert.equal(toNext("I"), "M");
-            chai.assert.equal(toNext("M"), "II");
-            chai.assert.equal(toNext("II"), "IM");
-            chai.assert.equal(toNext("IM"), "MI");
-            chai.assert.equal(toNext("MI"), "MM");
-            chai.assert.equal(toNext("MM"), "III");
-            chai.assert.equal(toNext("III"), "IIM");
-            chai.assert.equal(toNext("IIM"), "IMI");
-            chai.assert.equal(toNext("IMI"), "IMM");
-            chai.assert.equal(toNext("IMM"), "MII");
-            chai.assert.equal(toNext("MII"), "MIM");
-            chai.assert.equal(toNext("MIM"), "MMI");
-            chai.assert.equal(toNext("MMI"), "MMM");
-            chai.assert.equal(toNext("MMM"), "IIII");
-            chai.assert.equal(toNext("IIII"), "IIIM");
-            chai.assert.equal(toNext("MMMI"), "MMMM");
-            chai.assert.equal(toNext("MMMM"), "IIIII");
+            chai.assert.equal(toNext("", 12), "I");
+            chai.assert.equal(toNext("I", 12), "M");
+            chai.assert.equal(toNext("M", 12), "IM");
+            chai.assert.equal(toNext("IM", 12), "MI");
+            chai.assert.equal(toNext("MI", 12), "MM");
+            chai.assert.equal(toNext("MM", 12), "IMI");
+            chai.assert.equal(toNext("IMI", 12), "IMM");
+            chai.assert.equal(toNext("IMM", 12), "MIM");
+            chai.assert.equal(toNext("MIM", 12), "MMI");
+            chai.assert.equal(toNext("MMI", 12), "MMM");
+            chai.assert.equal(toNext("MMM", 12), "IMIM");
+            chai.assert.equal(toNext("IMIM", 12), "IMMI");
+            chai.assert.equal(toNext("MMMI", 12), "MMMM");
+            chai.assert.equal(toNext("MMMM", 12), "IMIMI");
+            chai.assert.equal(toNext("MMMMMMMMMMI", 12), "IM".repeat(6));
+            chai.assert.equal(toNext("IMMMMMMMMMMI", 12), "MI".repeat(6));
         });
     });
     describe('isClean', function() {
