@@ -15,6 +15,19 @@ function toNextByDepth(str, maxDepth, pruneCondition) {
     }
 }
 
+class mapSolver {
+    constructor(map) {
+        this.map = map;
+    }
+    init(rawNumbers) {
+        this.solution = map[getPermutationInverseRaw(rawNumbers)].miString;
+    }
+    getIterator() {
+        return this.solution[Symbol.iterator()];
+    }
+}
+
+
 
 
 function toNext(str) {
@@ -30,9 +43,11 @@ function solve(rawNumbers, solver, maxChange){
     let currentNumbers = {...rawNumbers};
     let iChange = 0;
     const goal = range(12, 0);
-    const frame = new Frame(12)
+    const frame = new Frame(12);
+    solver.init(rawNumbers);
+    const iterator = solver.getIterator();
     while (currentNumbers !== goal && ichange < maxChange){
-        currentNumbers = frame[solver.next()](currentNumbers);
+        currentNumbers = frame[iterator.next()](currentNumbers);
         iChange++;
     }
 }

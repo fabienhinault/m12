@@ -27,6 +27,16 @@ function pick(array) {
     return array[getRandomInt(0, array.length)];
 }
 
+function getRandomMiString(len) {
+    if (!len) {
+        len = getRandomInt(10, 100);
+    }
+    let result = "";
+    for(let iTime = 0; iTime < len; iTime++){
+        result += pick(["I", "M"]);
+    }
+}
+
 class Frame {
     constructor(n) {
         this.N = n;
