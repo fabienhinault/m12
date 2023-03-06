@@ -35,4 +35,19 @@ describe('libm12', function () {
             chai.assert.isTrue(isClean("I", 12));
         });
     });
+    describe('Frame', function() {
+        it('["I"]', function () {
+            chai.assert.deepEqual(frame12['I'](range(12, 0)),
+                [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]);
+        });
+        it('.I', function () {
+            chai.assert.deepEqual(frame12.I(range(12, 0)),
+                [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]);
+        });
+    });
+    describe('getRandomMiString()', function() {
+        it('', function() {
+            chai.expect(getRandomMiString().length).gt(10);
+        });
+    });
 });

@@ -35,6 +35,7 @@ function getRandomMiString(len) {
     for(let iTime = 0; iTime < len; iTime++){
         result += pick(["I", "M"]);
     }
+    return result;
 }
 
 class Frame {
@@ -53,9 +54,11 @@ class Frame {
     }
 }
 
+const frame12 = new Frame(12);
+
 class Transform {
     constructor(miString, frame) {
-        this.miString = miSring;
+        this.miString = miString;
         this.frame = frame;
         this.rawPermuted = range(this.frame.N, 0);
         for (c of miString) {
