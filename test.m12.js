@@ -47,7 +47,10 @@ describe('libm12', function () {
     });
     describe('getRandomMiString()', function() {
         it('', function() {
-            chai.expect(getRandomMiString().length).gt(10);
+            const randomMiString = getRandomMiString();
+            chai.expect(randomMiString.length).gt(10);
+            chai.assert.isAtLeast(randomMiString.length, 11);
+            chai.assert.match(randomMiString, /^(M|I)*$/);
         });
     });
 });
