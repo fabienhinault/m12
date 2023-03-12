@@ -41,12 +41,19 @@ function getRandomMiString(len) {
 class Frame {
     constructor(n) {
         this.N = n;
-        this.mArray = makeMArray(n);
+        this.mArray = makeMArray(this.N);
         this.mInvArray = getPermutationInverseRaw(this.mArray);
+        this.rawGoal = range(this.N);
+        this.map = {};
+    }
+
+    equalsRawGoal(rawNumbers) {
+        return rawNumbers.length === this.N &&
+            this.rawGoal.every((v, i) => v === rawNumbers[i]);
     }
     
     M(numbers) {
-        return permute(numbers, this.arrayM);
+        return permute(numbers, this.mArray);
     }
 
     I(numbers) {
@@ -54,14 +61,14 @@ class Frame {
     }
 }
 
-const frame12 = new Frame(12);
+let frame12 = new Frame(12);
 
 class Transform {
     constructor(miString, frame) {
         this.miString = miString;
         this.frame = frame;
         this.rawPermuted = range(this.frame.N, 0);
-        for (c of miString) {
+        for (let c of miString) {
             this.rawPermuted = this.frame[c](this.rawPermuted)
         }
     }

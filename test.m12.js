@@ -53,4 +53,20 @@ describe('libm12', function () {
             chai.assert.match(randomMiString, /^(M|I)*$/);
         });
     });
+    describe('Transform', function() {
+        it('', function() {
+            const t = new Transform('MIM', frame12);
+            chai.assert.deepEqual(t.rawPermuted,
+                [6,0,5,11,7,1,4,10,8,2,3,9]);
+        });
+    });
 });
+describe('m12Solver', function () {
+    describe('solve', function () {
+        it('should solve', async function () {
+            solve(new Transform(getRandomMiString(), frame12).rawPermuted,
+                new MapSolver(frame12.map), 100);
+        });
+    });
+});
+

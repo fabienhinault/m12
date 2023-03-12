@@ -15,39 +15,28 @@ function toNextByDepth(str, maxDepth, pruneCondition) {
     }
 }
 
-class mapSolver {
+class MapSolver {
     constructor(map) {
         this.map = map;
     }
     init(rawNumbers) {
-        this.solution = map[getPermutationInverseRaw(rawNumbers)].miString;
+        this.solution = this.map[getPermutationInverseRaw(rawNumbers)].miString;
     }
     getIterator() {
-        return this.solution[Symbol.iterator()];
-    }
-}
-
-
-
-
-function toNext(str) {
-    const lastI = str.lastIndexOf("I");
-    if (lastI === -1) {
-        return "I".repeat(str.length + 1);
-    } else {
-        return str.substring(0, lastI) + "M" + "I".repeat(str.length - lastI - 1);
+        return this.solution[Symbol.iterator]();
     }
 }
 
 function solve(rawNumbers, solver, maxChange){
     let currentNumbers = {...rawNumbers};
     let iChange = 0;
-    const goal = range(12, 0);
-    const frame = new Frame(12);
     solver.init(rawNumbers);
     const iterator = solver.getIterator();
-    while (currentNumbers !== goal && ichange < maxChange){
-        currentNumbers = frame[iterator.next()](currentNumbers);
+    while (!frame12.equalsRawGoal(currentNumbers) && iChange < maxChange){
+        const c = iterator.next();
+        console.log(c);
+        currentNumbers = frame12[c.value](currentNumbers);
+        console.log(currentNumbers);
         iChange++;
     }
 }
