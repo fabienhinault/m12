@@ -81,6 +81,20 @@ function toggleOnSolution() {
     document.addEventListener('solution changed', updateSpanSolution);
 }
 
+function initNumbers() {
+    const tileSidePx = 520 / model.N;
+    for (i of model.numbers) {
+        const div = document.createElement("div");
+        div.appendChild(document.createTextNode(i));
+        div.className = "tile";
+        div.id = "tile-" + i;
+        div.style.width = tileSidePx + "px";
+        div.style.height = tileSidePx + "px";
+        divNumbers.appendChild(div);
+   
+    }
+}
+
     buttonI.onclick = () => model.I();
     buttonM.onclick = () => model.M(); 
     buttonShuffle.onclick = () => model.shuffle(Number(inputShuffle.value));
@@ -93,7 +107,6 @@ function toggleOnSolution() {
     document.addEventListener('numbers changed',
         evt => {
             let numbers = evt.detail.numbers;
-            divNumbers.innerHTML = numbers.join(' ');
         });
     document.addEventListener('shortcuts changed',
         evt => {
@@ -113,4 +126,5 @@ function toggleOnSolution() {
 
     model.reset();
     toggleOffAddShortcut();
+    initNumbers();
 });
