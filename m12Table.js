@@ -41,7 +41,17 @@ function compute(startString, intMaxSize) {
         }
     }
 }
+
+
+function compute01solverData() {
+    for (let i = 0; i < 12; i++) {
+        const res = rawTo0Last(applyString("M".repeat(i) + "I", A)).reverse();
+    }
+}
+
 let start = Date.now();
-compute("", 24);
-console.log(Date.now() - start);
+// compute("", 24);
+// console.log(Date.now() - start);
+
+
 
