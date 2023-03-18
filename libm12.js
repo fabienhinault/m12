@@ -6,6 +6,11 @@ function permute(array, permutation) {
     return permutation.map(permutationIndex => array[permutationIndex]);
 }
 
+function equalArrays(array1, array2) {
+    return array1.length === array2.length &&
+        array1.every((v, i) => v === array2[i]);
+}
+
 function getPermutationInverseRaw(rawPermutedArray) {
     let result = [];
     rawPermutedArray.forEach((element, index) => {result[element] = index;});
@@ -63,41 +68,54 @@ class Frame {
 
 let frame12 = new Frame(12);
 
-class Memo {
-    constructor(frame) {
+class MnesicRawNumbers {
+    constructor(numbers frame) {
         this.frame = frame;
-        this.memory = []
+        this.memory = [[...numbers]]
+        this.currentNumbers = numbers;
     }
 
-    I(numbers) {
-        if (this.memory === []) {
-            this.memory.push(numbers);
-        
+    I() {
         this.memory.push('I');
-        return frame.I(numbers);
+        this.currentNumbers = this.frame.I(this.currentNumbers);
+        this.memory.push([...this.currentNumbers]);
+        return this.currentNumbers;
     }
 
-    M(numbers) {
-        if (this.memory === []) {
-            this.memory.push(numbers);
-        }
+    M() {
         this.memory.push('M');
-        return frame.M(numbers);
+        this.currentNumbers = this.frame.I(this.currentNumbers);
+        this.memory.push([...this.currentNumbers]);
+        return this.currentNumbers;
     }
 
     // M until i comes last
-    msToLast(numbers, i) {
-        if (numbers[0] === i) {
-            throw Error('impossible');
+    msToNth(number, index) {
+        if (this.currentNumbers[0] === number) {
+            throw new Error('impossible');
         }
         let result = numbers;
-        while (numbers[this.frame.N -1] !== i) {
-            result = this.M(result);
+        while (this.currentNumbers[index] !== number) {
+            this.M();
         }
-        return result;
+        return this.currentNumbers;
     }
 
+    msToLast(number) {
+        return msToNth(number, this.frame.N - 1);
+    }
 
+    msTo2nd(number) {
+        return msToNth(number, 1);
+    }
+
+    msToMoRepresentant() {
+       if (0 === this.currentNumbers[0]) {
+           return this.msTo2nd(1);
+       } else {
+           return this.msTo2nd(0);
+       }
+    }
 }
 
 let memo12 = new Memo(frame12);
