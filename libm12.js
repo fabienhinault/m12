@@ -63,6 +63,45 @@ class Frame {
 
 let frame12 = new Frame(12);
 
+class Memo {
+    constructor(frame) {
+        this.frame = frame;
+        this.memory = []
+    }
+
+    I(numbers) {
+        if (this.memory === []) {
+            this.memory.push(numbers);
+        
+        this.memory.push('I');
+        return frame.I(numbers);
+    }
+
+    M(numbers) {
+        if (this.memory === []) {
+            this.memory.push(numbers);
+        }
+        this.memory.push('M');
+        return frame.M(numbers);
+    }
+
+    // M until i comes last
+    msToLast(numbers, i) {
+        if (numbers[0] === i) {
+            throw Error('impossible');
+        }
+        let result = numbers;
+        while (numbers[this.frame.N -1] !== i) {
+            result = this.M(result);
+        }
+        return result;
+    }
+
+
+}
+
+let memo12 = new Memo(frame12);
+
 class Transform {
     constructor(miString, frame) {
         this.miString = miString;
