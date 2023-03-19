@@ -60,6 +60,14 @@ describe('libm12', function () {
                 [6,0,5,11,7,1,4,10,8,2,3,9]);
         });
     });
+    describe('MnesicRawNumbers', function() {
+        it('', function() {
+            let mrn = new MnesicRawNumbers(range(12), frame12);
+            mrn.I();
+            chai.assert.deepEqual(mrn.currentNumbers,
+                [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]);
+            
+
 });
 describe('m12Solver', function () {
     describe('solve', function () {

@@ -118,8 +118,6 @@ class MnesicRawNumbers {
     }
 }
 
-let memo12 = new Memo(frame12);
-
 class Transform {
     constructor(miString, frame) {
         this.miString = miString;
