@@ -66,8 +66,23 @@ describe('libm12', function () {
             mrn.I();
             chai.assert.deepEqual(mrn.currentNumbers,
                 [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]);
+            chai.assert.equal(3, mrn.memory.length);
+            chai.assert.deepEqual(mrn.memory[0], range(12));
+            chai.assert.equal(mrn.memory[1], "I");
+            chai.assert.deepEqual(mrn.memory[2], mrn.currentNumbers);
+        });
+        it('', function() {
+            let mrn = new MnesicRawNumbers(range(12), frame12);
+            mrn.M();
+            chai.assert.deepEqual(mrn.currentNumbers,
+                [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
+            chai.assert.equal(3, mrn.memory.length);
+            chai.assert.deepEqual(mrn.memory[0], range(12));
+            chai.assert.equal(mrn.memory[1], "M");
+            chai.assert.deepEqual(mrn.memory[2], mrn.currentNumbers);
+        });
             
-
+    });
 });
 describe('m12Solver', function () {
     describe('solve', function () {
@@ -77,4 +92,3 @@ describe('m12Solver', function () {
         });
     });
 });
-
