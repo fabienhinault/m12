@@ -79,14 +79,21 @@ class MnesicRawNumbers {
         this.memory.push('I');
         this.currentNumbers = this.frame.I(this.currentNumbers);
         this.memory.push([...this.currentNumbers]);
-        return this.currentNumbers;
+        return this;
     }
 
     M() {
         this.memory.push('M');
         this.currentNumbers = this.frame.M(this.currentNumbers);
         this.memory.push([...this.currentNumbers]);
-        return this.currentNumbers;
+        return this;
+    }
+
+    applyString(str) {
+        for (const c of str) {
+            this[c]();
+        }
+        return this;
     }
 
     // M until i comes last
@@ -94,19 +101,18 @@ class MnesicRawNumbers {
         if (this.currentNumbers[0] === number) {
             throw new Error('impossible');
         }
-        let result = numbers;
         while (this.currentNumbers[index] !== number) {
             this.M();
         }
-        return this.currentNumbers;
+        return this;
     }
 
     msToLast(number) {
-        return msToNth(number, this.frame.N - 1);
+        return this.msToNth(number, this.frame.N - 1);
     }
 
     msTo2nd(number) {
-        return msToNth(number, 1);
+        return this.msToNth(number, 1);
     }
 
     msToMoRepresentant() {

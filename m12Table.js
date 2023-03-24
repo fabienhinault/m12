@@ -45,13 +45,16 @@ function compute(startString, intMaxSize) {
 
 function compute01solverData() {
     for (let i = 0; i < 12; i++) {
-        const res = rawTo0Last(applyString("M".repeat(i) + "I", A)).reverse();
+        let raw = new MnesicRawNumbers(range(12), frame12);
+        raw.applyString("M".repeat(i) + "I").msToLast(0).I();
+        console.log(raw);
     }
 }
 
 let start = Date.now();
+compute01solverData();
 // compute("", 24);
-// console.log(Date.now() - start);
+console.log(Date.now() - start);
 
 
 

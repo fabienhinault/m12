@@ -1,3 +1,4 @@
+const assert = chai.assert;
 describe('libm12', function () {
     describe('getSolution', function () {
         it('should return ""  when the value is IMMMMMMMMMMMI', function () {
@@ -61,7 +62,7 @@ describe('libm12', function () {
         });
     });
     describe('MnesicRawNumbers', function() {
-        it('', function() {
+        it('I', function() {
             let mrn = new MnesicRawNumbers(range(12), frame12);
             mrn.I();
             chai.assert.deepEqual(mrn.currentNumbers,
@@ -71,7 +72,7 @@ describe('libm12', function () {
             chai.assert.equal(mrn.memory[1], "I");
             chai.assert.deepEqual(mrn.memory[2], mrn.currentNumbers);
         });
-        it('', function() {
+        it('M', function() {
             let mrn = new MnesicRawNumbers(range(12), frame12);
             mrn.M();
             chai.assert.deepEqual(mrn.currentNumbers,
@@ -81,7 +82,40 @@ describe('libm12', function () {
             chai.assert.equal(mrn.memory[1], "M");
             chai.assert.deepEqual(mrn.memory[2], mrn.currentNumbers);
         });
-            
+        it('msToLast', function() {
+            let mrn = new MnesicRawNumbers(range(12), frame12);
+            mrn.msToLast(1);
+            assert.equal(mrn.currentNumbers[11], 1);
+            const memory = mrn.memory;
+            assert.equal(memory.length, 21);
+            chai.assert.deepEqual(mrn.memory[0], range(12));
+            for (let i = 1; i < 21; i = i + 2) {
+                chai.assert.equal(mrn.memory[1], "M");
+            }
+            chai.assert.deepEqual(mrn.memory[20], mrn.currentNumbers);
+        });
+        it('msTo2nd', function() {
+            let mrn = new MnesicRawNumbers(range(12), frame12);
+            mrn.msTo2nd(2);
+            assert.equal(mrn.currentNumbers[1], 2);
+            const memory = mrn.memory;
+            assert.equal(memory.length, 21);
+            chai.assert.deepEqual(mrn.memory[0], range(12));
+            for (let i = 1; i < 21; i = i + 2) {
+                chai.assert.equal(mrn.memory[1], "M");
+            }
+            chai.assert.deepEqual(mrn.memory[20], mrn.currentNumbers);
+        });
+        it('applyString', function() {
+            let mrn = new MnesicRawNumbers(range(12), frame12);
+            mrn.applyString("MIM");
+            chai.assert.deepEqual(mrn.currentNumbers,
+                [6, 0, 5, 11, 7, 1, 4, 10, 8, 2, 3, 9]);
+            const memory = mrn.memory;
+            assert.equal(memory.length, 7);
+            chai.assert.deepEqual(mrn.memory[0], range(12));
+            chai.assert.deepEqual(mrn.memory[6], mrn.currentNumbers);
+        });
     });
 });
 describe('m12Solver', function () {
