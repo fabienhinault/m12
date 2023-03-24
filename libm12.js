@@ -69,7 +69,7 @@ class Frame {
 let frame12 = new Frame(12);
 
 class MnesicRawNumbers {
-    constructor(numbers frame) {
+    constructor(numbers, frame) {
         this.frame = frame;
         this.memory = [[...numbers]]
         this.currentNumbers = numbers;
@@ -84,7 +84,7 @@ class MnesicRawNumbers {
 
     M() {
         this.memory.push('M');
-        this.currentNumbers = this.frame.I(this.currentNumbers);
+        this.currentNumbers = this.frame.M(this.currentNumbers);
         this.memory.push([...this.currentNumbers]);
         return this.currentNumbers;
     }
