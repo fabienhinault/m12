@@ -58,12 +58,26 @@ function storeO1data(raw) {
         map01[current] = {
             start: current,
             targets: targets,
-            done: false
+            done: []
 
         };
     }
 }
 
+function compute01solverDataFromNumbers3(rawNumbers) {
+    for (let i = 1; i < 11; i++) {
+        for (let jj = 1; jj < 11; jj++) {
+            for (let kkk = 1; kkk < 11; kkk++) {
+                let raw = new MnesicRawNumbers(rawNumbers, frame12);
+                raw.applyString("M".repeat(i) + "I").applyString("M".repeat(jj) + "I").applyString("M".repeat(kkk) + "I")
+                if (raw.currentNumbers[0] !== 0) {
+                    raw.msToLast(0).I().msTo2nd(1);
+                    storeO1data(raw);
+                }
+            }
+        }
+    }
+}
 function compute01solverDataFromNumbers(rawNumbers) {
     for (let i = 1; i < 11; i++) {
         for (let jj = 1; jj < 11; jj++) {
@@ -76,21 +90,22 @@ function compute01solverDataFromNumbers(rawNumbers) {
 
 function computeMore01solverData(){
     for (const v of Object.values(map01)) {
-        console.log(v);
-        if (!v.done) {
+        if (!v.done[2]) {
             compute01solverDataFromNumbers(v.start);
-            v.done = true;
+            v.done[2] = true;
         }
     }
 }
 
 function compute01solverData() {
     compute01solverDataFromNumbers(range(12));
-//    computeMore01solverData();
+    computeMore01solverData();
+    computeMore01solverData();
 }
 
 let start = Date.now();
 compute01solverData();
+compute01solverDataFromNumbers3(range(12));
 // compute("", 24);
 console.log(Date.now() - start);
 console.log(map01);
