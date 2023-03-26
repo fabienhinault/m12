@@ -42,19 +42,58 @@ function compute(startString, intMaxSize) {
     }
 }
 
+let map01 = {};
+
+function storeO1data(raw) {
+    const current = raw.currentNumbers;
+    if (map01[current] === undefined) {
+        const mem = raw.memory;
+        let iLastI = mem.lastIndexOf("I");
+        let targets = [];
+        while (iLastI !== -1) {
+            targets.push(mem[iLastI - 1][0])
+            iLastI = [...mem].splice(0, iLastI - 1).lastIndexOf("I");
+        }
+
+        map01[current] = {
+            start: current,
+            targets: targets,
+            done: false
+
+        };
+    }
+}
+
+function compute01solverDataFromNumbers(rawNumbers) {
+    for (let i = 1; i < 11; i++) {
+        for (let jj = 1; jj < 11; jj++) {
+            let raw = new MnesicRawNumbers(rawNumbers, frame12);
+            raw.applyString("M".repeat(i) + "I").applyString("M".repeat(jj) + "I").msToLast(0).I().msTo2nd(1);
+            storeO1data(raw);
+        }
+    }
+}
+
+function computeMore01solverData(){
+    for (const v of Object.values(map01)) {
+        console.log(v);
+        if (!v.done) {
+            compute01solverDataFromNumbers(v.start);
+            v.done = true;
+        }
+    }
+}
 
 function compute01solverData() {
-    for (let i = 0; i < 12; i++) {
-        let raw = new MnesicRawNumbers(range(12), frame12);
-        raw.applyString("M".repeat(i) + "I").msToLast(0).I();
-        console.log(raw);
-    }
+    compute01solverDataFromNumbers(range(12));
+//    computeMore01solverData();
 }
 
 let start = Date.now();
 compute01solverData();
 // compute("", 24);
 console.log(Date.now() - start);
-
+console.log(map01);
+console.log(Object.keys(map01).length);
 
 

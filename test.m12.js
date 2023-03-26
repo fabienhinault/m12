@@ -116,6 +116,19 @@ describe('libm12', function () {
             chai.assert.deepEqual(mrn.memory[0], range(12));
             chai.assert.deepEqual(mrn.memory[6], mrn.currentNumbers);
         });
+        it('chain', function() {
+            let mrn = new MnesicRawNumbers(range(12), frame12);
+            mrn.applyString("M".repeat(1) + "I").applyString("M".repeat(1) + "I");
+            const memory = mrn.memory;
+            assert.equal(memory.length, 9);
+            assert.deepEqual(memory[0], range(12));
+            assert.deepEqual(memory[memory.length - 1], mrn.currentNumbers);
+            assert.equal(memory[1], "M");
+            assert.equal(memory[3], "I");
+            assert.equal(memory[5], "M");
+            assert.equal(memory[7], "I");
+        });
+
     });
 });
 describe('m12Solver', function () {
