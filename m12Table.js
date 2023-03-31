@@ -96,6 +96,14 @@ function computeMore01solverData(){
         }
     }
 }
+function computeMore01solverData3(){
+    for (const v of Object.values(map01)) {
+        if (!v.done[3]) {
+            compute01solverDataFromNumbers3(v.start);
+            v.done[3] = true;
+        }
+    }
+}
 
 function compute01solverData() {
     compute01solverDataFromNumbers(range(12));
@@ -106,6 +114,7 @@ function compute01solverData() {
 let start = Date.now();
 compute01solverData();
 compute01solverDataFromNumbers3(range(12));
+computeMore01solverData3();
 // compute("", 24);
 console.log(Date.now() - start);
 console.log(map01);

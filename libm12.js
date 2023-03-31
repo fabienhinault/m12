@@ -50,6 +50,7 @@ class Frame {
         this.mInvArray = getPermutationInverseRaw(this.mArray);
         this.rawGoal = range(this.N);
         this.map = {};
+        this.map01 = {};
     }
 
     equalsRawGoal(rawNumbers) {

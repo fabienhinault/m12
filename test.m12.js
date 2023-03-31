@@ -60,6 +60,10 @@ describe('libm12', function () {
             chai.assert.deepEqual(t.rawPermuted,
                 [6,0,5,11,7,1,4,10,8,2,3,9]);
         });
+        it('', function() {
+            const t = new Transform(getRandomMiString(), frame12);
+            chai.assert.equal(t.rawPermuted.length, 12);
+        });
     });
     describe('MnesicRawNumbers', function() {
         it('I', function() {
@@ -132,10 +136,36 @@ describe('libm12', function () {
     });
 });
 describe('m12Solver', function () {
-    describe('solve', function () {
-        it('should solve', async function () {
-            solve(new Transform(getRandomMiString(), frame12).rawPermuted,
-                new MapSolver(frame12.map), 100);
+//    describe('solve [6, 5, 1, 3, 7, 4, 10, 0, 9, 2, 8, 11]', function () {
+//        it('should solve', async function () {
+//            solve([6, 5, 1, 3, 7, 4, 10, 0, 9, 2, 8 ,11],
+//                new MapAllSolver(frame12.map), 100);
+//        });
+//    });
+    describe('solve all', function () {
+        it('should solve ""', async function () {
+            assert.isTrue(solve(range(12), new MapAllSolver(frame12.map), 100));
+        });
+        it('should solve [5, 7, 0, 8, 9, 4, 1, 11, 3, 10, 6, 2]', async function () {
+            assert.isTrue(solve([5, 7, 0, 8, 9, 4, 1, 11, 3, 10, 6, 2],
+                new MapAllSolver(frame12.map), 100));
+        });
+        it('should solve random', async function () {
+            const randomMiString = getRandomMiString();
+            const rawNumbers = new Transform(randomMiString, frame12).rawPermuted;
+            console.log(randomMiString);
+            console.log(rawNumbers);
+            assert.isTrue(solve(rawNumbers, new MapAllSolver(frame12.map), 100));
+        });
+    });
+    describe('solve 01', function () {
+        it('should solve 01 [0,8,9,11,4,2,1,10,7,3,6,5]', async function () {
+            assert.isTrue(solve([0,8,9,11,4,2,1,10,7,3,6,5], new Map01Solver(frame12.map01), 100));
+        });
+        it('should solve 01 random', async function () {
+            const rawNumbers = new Transform(getRandomMiString(), frame12).rawPermuted;
+            console.log(rawNumbers);
+            assert.isTrue(solve(rawNumbers, new Map01Solver(frame12.map01), 100));
         });
     });
 });

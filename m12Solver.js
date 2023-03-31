@@ -15,28 +15,93 @@ function toNextByDepth(str, maxDepth, pruneCondition) {
     }
 }
 
-class MapSolver {
+class MapAllSolver {
     constructor(map) {
         this.map = map;
     }
     init(rawNumbers) {
         this.solution = this.map[getPermutationInverseRaw(rawNumbers)].miString;
+        this.iterator = this.getIterator();
     }
     getIterator() {
         return this.solution[Symbol.iterator]();
     }
+    getNext(rawNumbers) {
+        return this.iterator.next().value;
+    }
+
+}
+
+class Map01SolverStateGoalNth {
+    constructor(goalNumber, goalIndex) {
+        this.goalNumber = goalNumber;
+        this.goalIndex = goalIndex;
+    }
+    getNext(rawNumbers) {
+        return "M";
+    }
+    isDone(rawNumbers) {
+        return this.goalNumber === rawNumbers[this.goalIndex];
+    }
+}
+
+class Map01SolverStateOneOp {
+    constructor(opString) {
+        this.done = false;
+        this.opString = opString
+    }
+    getNext(rawNumbers) {
+        this.done = true;
+        return this.opString;
+    }
+    isDone(rawNumbers) {
+        return this.done;
+    }
+}
+
+class Map01Solver {
+    constructor(map01) {
+        this.map01 = map01;
+        this.stateQueue = [];
+    }
+    init(rawNumbers) {
+        if (rawNumbers[0] !== 0) {
+            this.stateQueue.push(new Map01SolverStateGoalNth(0, rawNumbers.length -1));
+            this.stateQueue.push(new Map01SolverStateOneOp("I"));
+        }
+        this.stateQueue.push(new Map01SolverStateGoalNth(1, 1));
+    }
+    getNext(rawNumbers) {
+        if (this.stateQueue.length > 0 && this.stateQueue[0].isDone(rawNumbers)) {
+            this.stateQueue.splice(0, 1);
+        }
+        if (this.stateQueue.length === 0) {
+            this.buildMap01Queue(rawNumbers);
+        }
+        return this.stateQueue[0].getNext(rawNumbers);
+    }
+    buildMap01Queue(rawNumbers) {
+        const solution = this.map01[rawNumbers].targets;
+        for (const last of solution) {
+            this.stateQueue.push(new Map01SolverStateGoalNth(last, rawNumbers.length -1));
+            this.stateQueue.push(new Map01SolverStateOneOp("I"));
+            if (last === 0) {
+                this.stateQueue.push(new Map01SolverStateGoalNth(1, 1));
+            }
+        }
+    }
 }
 
 function solve(rawNumbers, solver, maxChange){
-    let currentNumbers = {...rawNumbers};
+    let currentNumbers = [...rawNumbers];
     let iChange = 0;
     solver.init(rawNumbers);
-    const iterator = solver.getIterator();
     while (!frame12.equalsRawGoal(currentNumbers) && iChange < maxChange){
-        const c = iterator.next();
+        const c = solver.getNext(currentNumbers);
         console.log(c);
-        currentNumbers = frame12[c.value](currentNumbers);
+        currentNumbers = frame12[c](currentNumbers);
         console.log(currentNumbers);
         iChange++;
     }
+    return frame12.equalsRawGoal(currentNumbers);
 }
