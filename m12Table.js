@@ -111,13 +111,31 @@ function compute01solverData() {
     computeMore01solverData();
 }
 
+let graph = [];
+function computeGraph01() {
+    for (const n of Object.values(frame12.map01)) {
+        console.log(n);
+        for (let first = 2; first < 12; first++) {
+            for (let second = 2; second < 12; second++) {
+                if (first !== second) {
+                    console.log("first == " + first + " second == " + second);
+                    let raw = new MnesicRawNumbers(n.start, frame12);
+                    raw.msToLast(first).I().msToLast(second).I().msToLast(0).I().msTo2nd(1);
+                    graph.push({start:n.start, first:first, second:second, end:raw.currentNumbers});
+                }
+            }
+        }
+    }
+}
+
 let start = Date.now();
-compute01solverData();
-compute01solverDataFromNumbers3(range(12));
-computeMore01solverData3();
+//compute01solverData();
+//compute01solverDataFromNumbers3(range(12));
+//computeMore01solverData3();
 // compute("", 24);
+computeGraph01();
 console.log(Date.now() - start);
-console.log(map01);
-console.log(Object.keys(map01).length);
+//console.log(map01);
+//console.log(Object.keys(map01).length);
 
 

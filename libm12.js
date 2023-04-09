@@ -73,7 +73,7 @@ class MnesicRawNumbers {
     constructor(numbers, frame) {
         this.frame = frame;
         this.memory = [[...numbers]]
-        this.currentNumbers = numbers;
+        this.currentNumbers = [...numbers];
     }
 
     I() {
@@ -100,7 +100,7 @@ class MnesicRawNumbers {
     // M until i comes last
     msToNth(number, index) {
         if (this.currentNumbers[0] === number) {
-            throw new Error('impossible');
+            throw new Error(`impossible to put ${number} ${index}th on ${this.currenNumber}`);
         }
         while (this.currentNumbers[index] !== number) {
             this.M();

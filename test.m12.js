@@ -132,6 +132,12 @@ describe('libm12', function () {
             assert.equal(memory[5], "M");
             assert.equal(memory[7], "I");
         });
+        it('chain', function() {
+            let a = [0, 1,  4, 2, 8, 7, 5, 11, 3, 9, 10, 6];
+            let mrn = new MnesicRawNumbers(a, frame12);
+            mrn.msToLast(6).I()
+            assert.deepEqual(a, [0, 1,  4, 2, 8, 7, 5, 11, 3, 9, 10, 6]);
+        });
 
     });
 });
