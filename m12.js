@@ -82,6 +82,7 @@ function toggleOnSolution() {
 }
 
 function initNumbers() {
+    divNumbers.innerHTML = "";
     const tileSidePx = 520 / model.N;
     for (i of model.numbers) {
         const div = document.createElement("div");
@@ -90,6 +91,7 @@ function initNumbers() {
         div.id = "tile-" + i;
         div.style.width = tileSidePx + "px";
         div.style.height = tileSidePx + "px";
+        div.style.lineHeight = tileSidePx + "px";
         divNumbers.appendChild(div);
    
     }
@@ -106,7 +108,7 @@ function initNumbers() {
 
     document.addEventListener('numbers changed',
         evt => {
-            let numbers = evt.detail.numbers;
+            initNumbers();
         });
     document.addEventListener('shortcuts changed',
         evt => {
