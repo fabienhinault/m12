@@ -92,8 +92,9 @@ function initNumbers() {
         div.style.width = tileSidePx + "px";
         div.style.height = tileSidePx + "px";
         div.style.lineHeight = tileSidePx + "px";
+        const pct = 100 - (i - 1) / (model.N -1) * 50;
+        div.style.backgroundColor = `hsl(240, 100%, ${pct}%)`
         divNumbers.appendChild(div);
-   
     }
 }
 
