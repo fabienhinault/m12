@@ -7,3 +7,8 @@ body {
 .tile {
     display: inline-block
 }
+
+#numbers div {
+    border-radius: 3px;
+    margin: 1px;
+}
