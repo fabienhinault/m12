@@ -128,14 +128,47 @@ function computeGraph01() {
     }
 }
 
+function groupByMove(acc, current){
+    if (acc[current.move] === undefined) {
+        acc[current.move] = {move:current.move, starts:[current.start]};
+    } else{
+        acc[current.move].starts.push(current.start);
+        acc[current.move].starts.sort();
+    }
+    return acc;
+}
+
+function maxStartsLength(acc, current) {
+    if (!acc || acc.starts.length < current.starts.length) {
+        return current;
+    }
+    return acc;
+}
+
+function compute01HumanSolverData() {
+    const solution = [];
+    for (let third = 2; third < 12; third++) {
+        const byMove = frame12.graph01
+            .filter(o => arrayStartsWith(o.start, [0, 1, third]) &&
+                arrayStartsWith(o.end, [0,1,2]))
+            .map(o => {
+                return {start: o.start.slice(3,5), move:[o.first, o.second]};})
+            .reduce(groupByMove, {});
+        const maxs = Object.values(byMove).reduce(maxStartsLength, null)
+                    ;
+       console.log(third);
+       console.log(maxs);
+    }
+}
+
 let start = Date.now();
 //compute01solverData();
 //compute01solverDataFromNumbers3(range(12));
 //computeMore01solverData3();
 // compute("", 24);
-computeGraph01();
+//computeGraph01();
+compute01HumanSolverData();
 console.log(Date.now() - start);
 //console.log(map01);
 //console.log(Object.keys(map01).length);
-
 
