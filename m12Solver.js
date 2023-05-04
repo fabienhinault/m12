@@ -92,6 +92,31 @@ class Map01Solver {
     }
 }
 
+/*
+ * from 1,2:
+ * 5
+2 
+move: Array [ 4, 2 ]
+when 3 is 6th, move 5, then 3, goes to 1,2,3 at 24/90
+
+10 
+2 
+move: Array [ 3, 2 ]
+when 3 is 11th, move 4, then 3 goes to 1,2,3 at 24/90
+
+else: 3, then the third goes to 1,2,3 at 16/90
+
+from 1,2,3,4
+
+5 
+move: Array [ 9, 8 ]
+if the fifth number is 6, then 10 followed by 9
+
+10 
+move: Array [ 9, 7 ]
+if the fifth number is 11, then 10 followed by 8
+*/
+
 function solve(rawNumbers, solver, maxChange){
     let currentNumbers = [...rawNumbers];
     let iChange = 0;
