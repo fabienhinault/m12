@@ -145,21 +145,40 @@ function maxStartsLength(acc, current) {
     return acc;
 }
 
-function compute01HumanSolverData() {
+function getMaxMove(predicate, target) {
+    const byMove = frame12.graph01
+        .filter(o => predicate(o) && arrayStartsWith(o.end, target))
+        .map(o => {
+            return {start: o.start, move:[o.first, o.second]};})
+        .reduce(groupByMove, {});
+    return Object.values(byMove).reduce(maxStartsLength, null);
+}
+function compute01HumanSolverData1234() {
     const solution = [];
-    for (let third = 2; third < 12; third++) {
-        const byMove = frame12.graph01
-            .filter(o => arrayStartsWith(o.start, [0, 1, third]) &&
-                arrayStartsWith(o.end, [0,1,2]))
-            .map(o => {
-                return {start: o.start.slice(3,5), move:[o.first, o.second]};})
-            .reduce(groupByMove, {});
-        const maxs = Object.values(byMove).reduce(maxStartsLength, null)
-                    ;
-       console.log(third);
-       console.log(maxs);
+    for (let index = 4; index < 12; index++) {
+        console.log(index);
+        for (let ith = 4; ith < 12; ith++) {
+            const predicate = (o => arrayStartsWith(o.start, [0,1, 2, 3]) && o.start[index] === ith);
+            const maxs = getMaxMove(predicate, [0,1,2,3,4]);
+            console.log(ith);
+            console.log(maxs);
+        }
     }
 }
+
+function compute01HumanSolverData() {
+    const solution = [];
+    for (let index = 2; index < 12; index++) {
+        console.log(index);
+        for (let ith = 2; ith < 12; ith++) {
+            const predicate = (o => arrayStartsWith(o.start, [0,1]) && o.start[index] === ith);
+            const maxs = getMaxMove(predicate, [0,1,2]);
+            console.log(ith);
+            console.log(maxs);
+        }
+    }
+}
+
 
 let start = Date.now();
 //compute01solverData();
@@ -167,7 +186,8 @@ let start = Date.now();
 //computeMore01solverData3();
 // compute("", 24);
 //computeGraph01();
-compute01HumanSolverData();
+//compute01HumanSolverData();
+compute01HumanSolverData1234();
 console.log(Date.now() - start);
 //console.log(map01);
 //console.log(Object.keys(map01).length);
