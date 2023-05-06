@@ -11,6 +11,17 @@ describe('libm12', function () {
                 [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
         });
     });
+    describe('complexity generator', function() {
+        it('', function () {
+            const g12 = new MiComplexityGenerator(frame12);
+            chai.assert.deepEqual(g12.toNext(["M"]), ["MM"]);
+            chai.assert.deepEqual(g12.toNext(["MM"]), ["MMM"]);
+            chai.assert.deepEqual(g12.toNext(["MMM"]), ["MMMM"]);
+            chai.assert.deepEqual(g12.toNext(["MMMM"]), ["MMMMM"]);
+            chai.assert.deepEqual(g12.toNext(["MMMMMMMMMM"]), ["M", "M"]);
+            chai.assert.deepEqual(g12.toNext(["M", "MMMMMMMMMM"]), ["MM", "M"]);
+        });
+    });
     describe('toNext', function() {
         it('', function () {
             chai.assert.equal(toNext("", 12), "I");
@@ -27,7 +38,7 @@ describe('libm12', function () {
             chai.assert.equal(toNext("IMIM", 12), "IMMI");
             chai.assert.equal(toNext("MMMI", 12), "MMMM");
             chai.assert.equal(toNext("MMMM", 12), "IMIMI");
-            chai.assert.equal(toNext("MMMMMMMMMMI", 12), "IM".repeat(6));
+            chai.assert.equal(toNext("MMM"+"MMM"+"MMM"+"MI", 12), "IM".repeat(6));
             chai.assert.equal(toNext("IMMMMMMMMMMI", 12), "MI".repeat(6));
         });
     });

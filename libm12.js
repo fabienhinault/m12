@@ -258,6 +258,40 @@ function getCycles(rawNumbers) {
     return cycles;
 }
 
+class MiComplexityGenerator {
+    constructor(frame) {
+        this.frame = frame;
+        this.N = this.frame.N;
+    }
+
+    getStartMss(complexity) {
+        return Array(complexity).fill("M");
+    }
+
+    toNext(mss) {
+        const iLastRunning = mss.findLastIndex(ms => ms.length < this.N - 2);
+        if (iLastRunning === -1) {
+            return this.getStartMss(mss.length + 1);
+        } else {
+            return mss.slice(0, iLastRunning).concat(
+                [mss[iLastRunning] + "M"]).concat(
+                this.getStartMss(mss.length - iLastRunning - 1));
+        }
+    }
+
+    *allMIs(min, max) {
+        let last = this.getStartMss(min);
+        while (last.length < max) {
+            const str = last.join("I");
+            yield str;
+            yield "I" + str;
+            yield str + "I";
+            yield "I" + str + "I";
+            last = this.toNext(last);
+        }
+    }
+}
+
 /**
  * rawNumbers : array, result of transform applyed to [0, 1, ... N-1]
  * */
@@ -284,6 +318,7 @@ function toNext(str, n) {
     } else {
         const next = str.substring(0, iLastI) + "M" + 
             getStartString(str.length - iLastI - 1);
+        // a string with n-1 Ms is dirty. Go to the next clean.
         const iMs = next.indexOf('M'.repeat(n - 1));
         if (iMs === -1) {
             return next;
