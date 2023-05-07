@@ -18,7 +18,7 @@ function applyString(str, numbers) {
 }
 
 const A = range(12, 0);
-let map = {};
+let map = frame12.map;
 
 function compute(startString, intMaxSize) {
     for (const str of allMIs(startString, intMaxSize, 12)) {
@@ -42,6 +42,23 @@ function compute(startString, intMaxSize) {
     }
 }
 
+function computeByComplexity(intMinSize, intMaxSize) {
+    const g12 = new MiComplexityGenerator(frame12);
+    for (const str of g12.allMIs(intMinSize, intMaxSize)) {
+        if (isClean(str, 12)) {
+            let name = getNameFromAction(str); 
+            console.log(name);
+            const res = applyString(str, A);
+            if (map[res].altMiString === undefined){
+                map[res] = ({
+                    ...map[res],
+                    altMiString: str,
+                    altName: name,
+                });
+            }
+        }
+    }
+}
 let map01 = {};
 
 function storeO1data(raw) {
@@ -185,10 +202,13 @@ let start = Date.now();
 //compute01solverDataFromNumbers3(range(12));
 //computeMore01solverData3();
 // compute("", 24);
+computeByComplexity(1, 3);
 //computeGraph01();
 //compute01HumanSolverData();
-compute01HumanSolverData1234();
+//compute01HumanSolverData1234();
 console.log(Date.now() - start);
 //console.log(map01);
 //console.log(Object.keys(map01).length);
 
+
+// 𝑓 ⿔㨆
