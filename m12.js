@@ -1,9 +1,14 @@
 // import {range, permute, getRandomInt, pick, makeMArray, makeMInvArray, getComplementModulo, getIsInverseLength, getMsInverseLength, getGroupInverse, getSolution} from 'libm12';
 
 document.addEventListener('DOMContentLoaded', function() {
-    const model = new Model(
-        Number(new URL(window.location.toLocaleString()).searchParams.get('n')) || 12,
-        document);
+    const N = Number(new URL(window.location.toLocaleString()).searchParams.get('n'));
+    const frame;
+    if (N > 0 && N !== 12) {
+        frame = new Frame(N);
+    } else {
+        frame = frame12;
+    }
+    const model = new Model(frame, document);
 
     let showSolution = false;
     let addingShortcut = false;

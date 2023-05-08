@@ -36,8 +36,9 @@ class Shortcut {
 
 
 class Model {
-    constructor(n, evtDispatcher) {
-        this.N = n;
+    constructor(frame, evtDispatcher) {
+        this.frame = frame;
+        this.N = this.frame.N;
 	this.dispatcher = evtDispatcher;
 	this.arrayM = makeMArray(this.N);
 	this.arrayMInv = makeMInvArray(this.N);
@@ -51,6 +52,18 @@ class Model {
         this.shortcuts = [];
         this.dispatcher.addEventListener('lasts changed', evt => {this.updateSolution();});
         this.currentShortcut = new Shortcut(evtDispatcher);
+        if (Object.keys(this.frame.map).length !== 0) {
+            this.getSolution = this.getMapSolution;
+        } else {
+            this.getSolution = this.getLastsSolution;
+    }
+
+    getMapSolution() {
+        return this.frame.getMapSolution(prettyToRaw(this.numbers));
+    }
+
+    getLastsSolution() {
+        return getSolution(this.lasts, this.N);
     }
 
     dispatch(type, detail) {
@@ -94,6 +107,7 @@ class Model {
     }
 
     updateSolution() {
+        if (this.
         this.solution = getSolution(this.N, this.lasts.join(''));
         return this.dispatcher.dispatchEvent(new CustomEvent("solution changed", {detail: {solution: this.solution}}));
     }

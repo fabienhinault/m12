@@ -5,12 +5,30 @@ describe('libm12', function () {
             chai.assert.equal(getSolution(12, "IMMMMMMMMMMMI"), "");
         });
     });
+
     describe('makeMArray', function () {
         it('should return ...  when the value is 12', function () {
             chai.assert.deepEqual(makeMArray(12), 
                 [0, 11, 1, 10, 2, 9, 3, 8, 4, 7, 5, 6]);
         });
     });
+
+    describe('getPermutationInverseRaw', function () {
+        it('getPermutationInverseRaw', function () {
+            assert.deepEqual(
+                getPermutationInverseRaw([0, 11, 1, 10,  2, 9, 3, 8, 4, 7, 5, 6]),
+                [0, 2, 4, 6, 8, 10, 11, 9, 7, 5, 3, 1])
+        });
+    });
+
+    describe('getPermutationInversePretty', function () {
+        it('getPermutationInversePretty', function () {
+            assert.deepEqual(
+                getPermutationInverseRaw([1, 12, 2, 11, 3, 10, 4, 9, 5, 8, 6, 7]),
+                [1, 3, 5, 7, 9, 11, 12, 10, 8, 6, 4, 2])
+        });
+    });
+
     describe('complexity generator', function() {
         it('', function () {
             const g12 = new MiComplexityGenerator(frame12);

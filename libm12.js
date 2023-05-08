@@ -28,6 +28,14 @@ function getPermutationInversePretty(prettyPermutedArray) {
     return result;
 }
 
+function rawToPretty(array) {
+    return array.map(v => v + 1);
+}
+
+function prettyToRaw(array) {
+    return array.map(v => v - 1);
+}
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
@@ -69,7 +77,12 @@ class Frame {
     I(numbers) {
         return numbers.reverse();
     }
+
+    getMapSolution(rawNumbers) {
+        return this.map[getPermutationInverseRaw(rawNumbers)].miString;
+    }
 }
+
 
 let frame12 = new Frame(12);
 
