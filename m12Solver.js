@@ -106,15 +106,25 @@ when 3 is 11th, move 4, then 3 goes to 1,2,3 at 24/90
 
 else: 3, then the third goes to 1,2,3 at 16/90
 
-from 1,2,3,4
+Raw: from 0,1,2,3
+5   |  [ 9, 8 ]
+6   |  [ 5, 6, 8 ]
+7   |  [ 3, 7, 6 ]
+8   |  [ 5, 4, 3 ]
+9   |  [ 5, 4, 7 ]
+10  |  [ 9, 7 ]
+11  |  [ 7, 8, 6 ]
 
-5 
-move: Array [ 9, 8 ]
-if the fifth number is 6, then 10 followed by 9
 
-10 
-move: Array [ 9, 7 ]
-if the fifth number is 11, then 10 followed by 8
+Pretty: from 1,2,3,4
+6   |  [10,9]
+7   |  [6,7,9]
+8   |  [4,8,7]
+9   |  [6,5,4]
+10  |  [6,5,8]
+11  |  [10,8]
+12  |  [8,9,7]
+
 */
 
 function solve(rawNumbers, solver, maxChange){

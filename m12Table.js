@@ -145,6 +145,29 @@ function computeGraph01() {
     }
 }
 
+
+function computeGraph0123() {
+    for (const n of Object.values(frame12.map01).filter(o => arrayStartsWith(o.start, [0,1,2,3]) && !frame12.equalsRawGoal(o.start))) {
+        console.log(n);
+        const nbMoves = 3;
+
+        for (let first = 2; first < 12; first++) {
+            for (let second = 2; second < 12; second++) {
+                for (let third = 2; third < 12; third++) {
+                    if (first !== second && first !== third && second !== third) {
+                        console.log("first == " + first + " second == " + second, third);
+                        let raw = new MnesicRawNumbers(n.start, frame12);
+                        raw.msToLast(first).I().msToLast(second).I().msToLast(third).I().msToLast(0).I().msTo2nd(1);
+                        if (frame12.equalsRawGoal(raw.currentNumbers)) {
+                            graph.push({start:n.start, moves:[first, second, third], end:raw.currentNumbers});
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 function groupByMove(acc, current){
     if (acc[current.move] === undefined) {
         acc[current.move] = {move:current.move, starts:[current.start]};
@@ -202,8 +225,9 @@ let start = Date.now();
 //compute01solverDataFromNumbers3(range(12));
 //computeMore01solverData3();
 // compute("", 24);
-computeByComplexity(1, 3);
+//computeByComplexity(1, 3);
 //computeGraph01();
+computeGraph0123();
 //compute01HumanSolverData();
 //compute01HumanSolverData1234();
 console.log(Date.now() - start);
