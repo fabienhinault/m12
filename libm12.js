@@ -21,12 +21,6 @@ function getPermutationInverseRaw(rawPermutedArray) {
     return result;
 }
 
-function getPermutationInversePretty(prettyPermutedArray) {
-    let result = [];
-    prettyPermutedArray.forEach(
-        (element, index) => {result[element - 1] = index + 1;});
-    return result;
-}
 
 function rawToPretty(array) {
     return array.map(v => v + 1);
@@ -35,6 +29,19 @@ function rawToPretty(array) {
 function prettyToRaw(array) {
     return array.map(v => v - 1);
 }
+
+function getPermutationInversePretty(prettyPermutedArray) {
+    let result = [];
+    prettyPermutedArray.forEach(
+        (element, index) => {result[element - 1] = index + 1;});
+    return result;
+}
+
+/*
+ function getPermutationInversePretty(prettyPermutedArray) {
+     return rawToPretty(getPermutationInverseRaw(prettyToRaw(prettyPermutedArray)));
+ }
+*/
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);

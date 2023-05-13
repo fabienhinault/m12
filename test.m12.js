@@ -24,7 +24,7 @@ describe('libm12', function () {
     describe('getPermutationInversePretty', function () {
         it('getPermutationInversePretty', function () {
             assert.deepEqual(
-                getPermutationInverseRaw([1, 12, 2, 11, 3, 10, 4, 9, 5, 8, 6, 7]),
+                getPermutationInversePretty([1, 12, 2, 11, 3, 10, 4, 9, 5, 8, 6, 7]),
                 [1, 3, 5, 7, 9, 11, 12, 10, 8, 6, 4, 2])
         });
     });
