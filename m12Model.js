@@ -50,12 +50,13 @@ class Model {
 	    'M': a => permute(a, this.arrayMInv)
 	};
         this.shortcuts = [];
-        this.dispatcher.addEventListener('lasts changed', evt => {this.updateSolution();});
+        this.dispatcher.addEventListener('numbers changed', evt => {this.updateSolution();});
         this.currentShortcut = new Shortcut(evtDispatcher);
         if (Object.keys(this.frame.map).length !== 0) {
             this.getSolution = this.getMapSolution;
         } else {
             this.getSolution = this.getLastsSolution;
+        }
     }
 
     getMapSolution() {
@@ -63,7 +64,7 @@ class Model {
     }
 
     getLastsSolution() {
-        return getSolution(this.lasts, this.N);
+        return getSolution(this.N, this.lasts.join(''));
     }
 
     dispatch(type, detail) {
@@ -107,8 +108,7 @@ class Model {
     }
 
     updateSolution() {
-        if (this.
-        this.solution = getSolution(this.N, this.lasts.join(''));
+        this.solution = this.getSolution();
         return this.dispatcher.dispatchEvent(new CustomEvent("solution changed", {detail: {solution: this.solution}}));
     }
 

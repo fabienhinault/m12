@@ -190,10 +190,10 @@ function makeMInvArray(n){
     return result;
 }
 
-function getCleanedLasts(lasts, n) {
+function getCleanedLasts(lastsString, n) {
     const identityMs = 'M'.repeat(n - 1);
     let result;
-    let newResult = lasts;
+    let newResult = lastsString;
     do {
         result = newResult;
         newResult = result.replaceAll("II", "").replaceAll(identityMs, "");
@@ -243,8 +243,8 @@ function split(str) {
     return str.split(/(?<=M)(?=I)/).map(s => s.split(/(?<=I)(?=M)/)).flat();
 }
 
-function getSolution(n, lasts) {
-    return split(getCleanedLasts(lasts, n))
+function getSolution(n, lastsString) {
+    return split(getCleanedLasts(lastsString, n))
         .map(g => getGroupInverse(n, g))
         .reverse()
         .join('');

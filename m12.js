@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const N = Number(new URL(window.location.toLocaleString()).searchParams.get('n'));
-    const frame;
+    let frame = undefined;
     if (N > 0 && N !== 12) {
         frame = new Frame(N);
     } else {
