@@ -223,11 +223,12 @@ function compute01HumanSolverData() {
 let start = Date.now();
 //compute01solverData();
 //compute01solverDataFromNumbers3(range(12));
+compute01solverDataFromNumbers(range(12));
 //computeMore01solverData3();
 // compute("", 24);
 //computeByComplexity(1, 3);
 //computeGraph01();
-computeGraph0123();
+//computeGraph0123();
 //compute01HumanSolverData();
 //compute01HumanSolverData1234();
 console.log(Date.now() - start);

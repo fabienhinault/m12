@@ -86,7 +86,7 @@ class Frame {
     }
 
     getMapSolution(rawNumbers) {
-        return this.map[getPermutationInverseRaw(rawNumbers)].miString;
+        return this.map[getPermutationInverseRaw(rawNumbers)].altMiString;
     }
 }
 
