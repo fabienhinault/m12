@@ -132,8 +132,11 @@ function initNumbers() {
         div.style.width = tileSidePx + "px";
         div.style.height = tileSidePx + "px";
         div.style.lineHeight = tileSidePx + "px";
-        const pct = 100 - (i - 1) / (model.N -1) * 50;
+        const pct = 100 - (i - 1) / (model.N -1) * 50 - 2;
         div.style.backgroundColor = `hsl(240, 100%, ${pct}%)`
+        if (i > model.N / 2) {
+            div.style.color = "white";
+        }
         divNumbers.appendChild(div);
     }
 }
