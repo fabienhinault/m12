@@ -83,13 +83,37 @@ describe('libm12', function () {
             chai.assert.match(randomMiString, /^(M|I)*$/);
         });
     });
-    describe('Transform', function() {
-        it('', function() {
-            const t = new Transform('MIM', frame12);
-            chai.assert.deepEqual(t.rawPermuted,
-                [6,0,5,11,7,1,4,10,8,2,3,9]);
+    describe('msToMiString()', function() {
+        it('[0, 1, 0]', function () {
+            assert.equal('IMI', msToMiString([0, 1, 0]));
         });
-        it('', function() {
+        it('[1, 1]', function() {
+            assert.equal('MIM', msToMiString([1, 1]));
+        });
+        it('[]', function() {
+            assert.equal('', msToMiString([]));
+        });
+        it('[0]', function() {
+            assert.equal('', msToMiString([0]));
+        });
+    });
+    describe('Transform', function() {
+        it('MIM', function() {
+            const t = new Transform('MIM', frame12);
+            chai.assert.deepEqual(t.rawPermuted, [6,0,5,11,7,1,4,10,8,2,3,9]);
+            assert.deepEqual([1, 1], t.getMs());
+        });
+        it('IMI', function() {
+            const t = new Transform('IMI', frame12);
+            chai.assert.deepEqual(t.rawPermuted, [5,6,4,7,3,8,2,9,1,10,0,11]);
+            assert.deepEqual([0, 1, 0], t.getMs());
+        });
+        it('""', function() {
+            const t = new Transform('', frame12);
+            chai.assert.deepEqual(t.rawPermuted, range(12));
+            assert.deepEqual([0], t.getMs());
+        });
+        it('random', function() {
             const t = new Transform(getRandomMiString(), frame12);
             chai.assert.equal(t.rawPermuted.length, 12);
         });

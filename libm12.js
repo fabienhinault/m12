@@ -149,6 +149,20 @@ class MnesicRawNumbers {
     }
 }
 
+function pushEmptyBeforeI(splittedMiString) {
+    if (splittedMiString[0].charAt(0) === "I") {
+        splittedMiString.splice(0, 0, []);
+    }
+    if (splittedMiString[splittedMiString.length - 1].charAt(0) === "I") {
+        splittedMiString.push([]);
+    }
+    return splittedMiString;
+}
+
+function msToMiString(ms) {
+    return ms.map(n => "M".repeat(n)).join("I");
+}
+
 class Transform {
     constructor(miString, frame) {
         this.miString = miString;
@@ -157,10 +171,20 @@ class Transform {
         for (let c of miString) {
             this.rawPermuted = this.frame[c](this.rawPermuted)
         }
+        this.prettyPermuted = permute(range(this.frame.N, 1), this.rawPermuted);
     }
-    
 
-        
+    getMs() {
+        return pushEmptyBeforeI(split(this.miString))
+            .filter((e, i) => i % 2 === 0)
+            .map(str => str.length);
+    }
+
+    getName() {
+        return split(this.miString)
+            .map(str => if1thenEmpty(str.length.toString()) + str.charAt(0))
+            .join('');
+    }
 }
 
 /**
@@ -205,15 +229,6 @@ function isClean(str, n) {
     return str.indexOf('M'.repeat(n - 1)) === -1 && str.indexOf("II") === -1;
 }
 
-// function updateSolutionPush(pushed, solution, cleanedLasts) {
-//     const previousLast = cleanedLasts[cleanedLasts.length - 1] || '';
-//     if (previousLast != pushed) {
-// 
-// 
-// }
-// 
-// function updateSolutionPop(solution, lasts) {
-// }
 function getComplementModulo(i, n) {
     let result = (n - i) % n;
     if (result < 0) {
@@ -221,7 +236,6 @@ function getComplementModulo(i, n) {
     }
     return result;
 }
-
 
 function getIsInverseLength(isLength) {
     return getComplementModulo(isLength, 2);
