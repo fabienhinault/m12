@@ -199,6 +199,13 @@ function shuffle() {
     buttonPlus.onclick = toggleOnAddShortcut;
     buttonSaveShortcut.onclick = saveShortcut;
 
+    document.addEventListener('keypress',
+        evt => {
+            const key = evt.key.toUpperCase();
+            if (['I', 'M'].includes(key)) {
+                model[key]();
+            }
+        });
     document.addEventListener('numbers changed',
         evt => {
             initNumbers();
