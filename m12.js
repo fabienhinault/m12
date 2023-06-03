@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonUndo = document.querySelector('#undo');
     const buttonSolution = document.querySelector('#btn_solution');
     const spanSolution = document.querySelector('#solution');
+    const spanTime = document.querySelector('#time');
     const divNumbers = document.querySelector('#numbers');
     const buttons = [buttonShuffle, buttonReset, buttonUndo, buttonPlus];
 
@@ -166,9 +167,24 @@ function initNumbers() {
     }
 }
 
+function startChrono(evt) {
+    model.chrono.start();
+    document.removeEventListener('numbers changed', startChrono);
+    document.addEventListener('solved', 
+        evt => {
+            spanTime.innerHTML = evt.detail.time;
+        });
+
+}
+
+function shuffle() {
+    model.shuffle(Number(inputShuffle.value));
+    document.addEventListener('numbers changed', startChrono);
+}
+
     buttonI.onclick = () => model.I();
     buttonM.onclick = () => model.M(); 
-    buttonShuffle.onclick = () => model.shuffle(Number(inputShuffle.value));
+    buttonShuffle.onclick = shuffle;
     buttonReset.onclick = () => model.reset();
     buttonUndo.onclick = () => model.undo();
     buttonSolution.onclick = () => toggleSolution();

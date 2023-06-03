@@ -68,14 +68,18 @@ class Frame {
         this.mArray = makeMArray(this.N);
         this.mInvArray = getPermutationInverseRaw(this.mArray);
         this.rawGoal = range(this.N);
+        this.prettyGoal = range(this.N, 1);
         this.map = {};
         this.map01 = {};
         this.solutions = {}
     }
 
+    equalsPrettyGoal(prettyNumbers) {
+        return equalArrays(prettyNumbers, this.prettyGoal);
+    }
+    
     equalsRawGoal(rawNumbers) {
-        return rawNumbers.length === this.N &&
-            this.rawGoal.every((v, i) => v === rawNumbers[i]);
+        return equalArrays(rawNumbers, this.rawGoal);
     }
     
     M(numbers) {
