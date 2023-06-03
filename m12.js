@@ -172,7 +172,7 @@ function startChrono(evt) {
     document.removeEventListener('numbers changed', startChrono);
     document.addEventListener('solved', 
         evt => {
-            spanTime.innerHTML = evt.detail.time;
+            spanTime.innerHTML = formatDuration(evt.detail.time);
         });
 
 }
