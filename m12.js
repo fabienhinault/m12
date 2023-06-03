@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonUndo = document.querySelector('#undo');
     const buttonSolution = document.querySelector('#btn_solution');
     const spanSolution = document.querySelector('#solution');
-    const spanTime = document.querySelector('#time');
+    const divTime = document.querySelector('#time');
     const divNumbers = document.querySelector('#numbers');
     const buttons = [buttonShuffle, buttonReset, buttonUndo, buttonPlus];
 
@@ -109,6 +109,14 @@ function initInput(input) {
     input.style.height = inputSidePx + "px";
 }
 
+function initDivTime() {
+    divTime.style.width = gameWidth + "px";
+    divTime.style.backgroundColor = getNumberBackgroundColor(1);
+    divTime.style.height = tileSidePx + "px";
+    divTime.style.lineHeight = tileSidePx + "px";
+}
+
+
 function initView() {
     initNumbersBorder(divNumbersHeader);
     initNumbersBorder(divNumbersFooter);
@@ -124,6 +132,7 @@ function initView() {
     initInput(inputShuffle);
     initInput(inputShortcutName);
     initInput(inputShortcut);
+    initDivTime();
 }
  
 
@@ -172,9 +181,8 @@ function startChrono(evt) {
     document.removeEventListener('numbers changed', startChrono);
     document.addEventListener('solved', 
         evt => {
-            spanTime.innerHTML = formatDuration(evt.detail.time);
+            divTime.innerHTML = formatDuration(evt.detail.time);
         });
-
 }
 
 function shuffle() {
