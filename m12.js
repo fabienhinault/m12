@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let showSolution = false;
     let addingShortcut = false;
-    let gameWidth = Math.min(520, window.screen.width);
-    let tileSideWithMargin = Math.floor(gameWidth / model.N);
+    let gameWidth = greatestMultipleLessThan(model.N, Math.min(514, window.screen.width));
+    let tileSideWithMargin = gameWidth / model.N;
     let tileSidePx = tileSideWithMargin - 2;
     let inputSidePx = tileSidePx -2;
     let bigButtonWidth = Math.floor(tileSideWithMargin * model.N  / 2) - 2;
@@ -137,7 +137,7 @@ function initView() {
  
 
 function getNumberBackgroundColor(i) {
-    const pct = 98 - (i - 1) / (model.N -1) * 50;
+    const pct = 98 - (i - 1) / (model.N -1) * 35;
     return `hsl(240, 100%, ${pct}%)`;
 }
 
@@ -151,12 +151,11 @@ function createNumberDiv(i) {
 
 
 function initNumbersBorder(divBorder) {
-    for (let i = 1; i <= model.N; i++) {
-        const div = createNumberDiv(i);
-        div.style.height = `${tileSidePx / 2}px`;
-        divBorder.appendChild(div);
-    }
     divBorder.style.height = `${tileSidePx / 2 + 2}px`;
+    divBorder.style.width = (gameWidth -2) + "px";
+    divBorder.style.background = `linear-gradient(to right, hsl(240, 100%, 98%), hsl(240, 100%, 63%))`;
+    divBorder.style.margin = "1px";
+    divBorder.style.borderRadius = "3px";
 }
 
 

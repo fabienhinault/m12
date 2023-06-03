@@ -23,6 +23,10 @@ function pick(array) {
     return array[getRandomInt(0, array.length)];
 }
 
+function greatestMultipleLessThan(k, sup) {
+    return sup - (sup % k);
+}
+
 function getRemainingDurationUnits(allSmalls, smallsInBig) {
     const remainingSmalls = allSmalls % smallsInBig;
     return {remainingSmalls, "allBigs": (allSmalls - remainingSmalls) / smallsInBig};
