@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let inputSidePx = tileSidePx -2;
     let bigButtonWidth = Math.floor(tileSideWithMargin * model.N  / 2) - 2;
 
+    const divGameContainer = document.querySelector('#game_container');
     const divNumbersHeader = document.querySelector('#numbers-header');
     const divNumbersFooter = document.querySelector('#numbers-footer');
     const buttonI = document.querySelector('#I');
@@ -110,7 +111,7 @@ function initInput(input) {
 }
 
 function initDivTime() {
-    divTime.style.width = gameWidth + "px";
+    divTime.style.width = (gameWidth - 2) + "px";
     divTime.style.backgroundColor = getNumberBackgroundColor(1);
     divTime.style.height = tileSidePx + "px";
     divTime.style.lineHeight = tileSidePx + "px";
@@ -118,6 +119,7 @@ function initDivTime() {
 
 
 function initView() {
+    divGameContainer.style.width = gameWidth + "px";
     initNumbersBorder(divNumbersHeader);
     initNumbersBorder(divNumbersFooter);
     initBigButton(buttonI);
