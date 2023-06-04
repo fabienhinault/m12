@@ -28,3 +28,27 @@ input {
     border-radius: 3px;
     margin: 1px;
 }
+
+#shortcuts {
+    display:none
+}
+
+#shortcuts-commands {
+    display:none
+}
+
+
+#undo{
+    display:none
+}
+#input_shuffle {
+    display:none
+}
+#solution-commands {
+    display:none
+}
+#reset {
+    display:none
+}
+
+
