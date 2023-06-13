@@ -117,6 +117,10 @@ class Frame {
     getMapSolution(prettyNumbers) {
         return msToMiString(this.solutions[prettyNumbers]);
     }
+
+    getReorderedNumbers(numbers) {
+        return [1,2,3,5,9,8,10,6,11,4,7,12].map(_ => _ - 1).map(_ => numbers[_]);
+    }
 }
 
 

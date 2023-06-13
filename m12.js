@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const spanSolution = document.querySelector('#solution');
     const divTime = document.querySelector('#time');
     const divNumbers = document.querySelector('#numbers');
+    const divReorderedNumbers = document.querySelector('#reordered-numbers');
     const buttons = [buttonShuffle, buttonReset, buttonUndo, buttonPlus];
 
     function toggleOnAddShortcut() {
@@ -160,8 +161,12 @@ function initNumbersBorder(divBorder) {
     divBorder.style.borderRadius = "3px";
 }
 
+function initNumberDivs() {
+    initNumbersDiv(model.numbers, divNumbers);
+    initNumbersDiv(frame.getReorderedNumbers(model.numbers, divReorderedNumbers));
+}
 
-function initNumbers() {
+function initNumbersDiv(numbers, div) {
     divNumbers.innerHTML = "";
     for (i of model.numbers) {
         const div = createNumberDiv(i);
