@@ -11,6 +11,7 @@ function equalArrays(array1, array2) {
         array1.every((v, i) => v === array2[i]);
 }
 
+
 function arrayStartsWith(tested, starter) {
     return equalArrays(tested.slice(0, starter.length), starter);
 }
@@ -22,7 +23,6 @@ function getRandomInt(min, max) {
 function pick(array) {
     return array[getRandomInt(0, array.length)];
 }
-
 function greatestMultipleLessThan(k, sup) {
     return sup - (sup % k);
 }
@@ -93,6 +93,7 @@ class Frame {
         this.mInvArray = getPermutationInverseRaw(this.mArray);
         this.rawGoal = range(this.N);
         this.prettyGoal = range(this.N, 1);
+        this.reordering = getCycles(this.M(this.rawGoal)).flat();
         this.map = {};
         this.map01 = {};
         this.solutions = {}
@@ -119,7 +120,7 @@ class Frame {
     }
 
     getReorderedNumbers(numbers) {
-        return [1,2,3,5,9,8,10,6,11,4,7,12].map(_ => _ - 1).map(_ => numbers[_]);
+        return this.reordering.map(_ => numbers[_]);
     }
 }
 
@@ -314,12 +315,26 @@ function getInvariants(cycles) {
     return cycles.filter(cycle => cycle.length === 1).map(ci => ci[0]);
 }
 
-function getCycles(rawNumbers) {
-    let lookedNumbers = Array(rawNumbers.length).fill(false);
-    let start = 0;
+/**
+ * numbers : array, result of transform applyed to [0, 1, ... N-1]
+ * */
+function getCycleFrom(numbers, start, lookedNumbers) {
+    let current = start;
+    let cycle = [];
+    do {
+        cycle.push(current);
+        lookedNumbers[current] = true;
+        current = numbers[current];
+    } while (current != start);
+    return cycle;
+}
+
+function getCycles(numbers) {
+    let lookedNumbers = Array(numbers.length).fill(false);
+    let start = numbers[0];
     let cycles = [];
     while (start !== -1) {
-        cycles.push(getCycleFrom(rawNumbers, start, lookedNumbers));
+        cycles.push(getCycleFrom(numbers, start, lookedNumbers));
         start = lookedNumbers.indexOf(false);
     }
     return cycles;
@@ -357,20 +372,6 @@ class MiComplexityGenerator {
             last = this.toNext(last);
         }
     }
-}
-
-/**
- * rawNumbers : array, result of transform applyed to [0, 1, ... N-1]
- * */
-function getCycleFrom(rawNumbers, start, lookedNumbers) {
-    let current = start;
-    let cycle = [];
-    do {
-        cycle.push(current);
-        lookedNumbers[current] = true;
-        current = rawNumbers[current];
-    } while (current != start);
-    return cycle;
 }
 
 function getStartString(len){

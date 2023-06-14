@@ -161,24 +161,24 @@ function initNumbersBorder(divBorder) {
     divBorder.style.borderRadius = "3px";
 }
 
-function initNumberDivs() {
+function initNumbersDivs() {
     initNumbersDiv(model.numbers, divNumbers);
-    initNumbersDiv(frame.getReorderedNumbers(model.numbers, divReorderedNumbers));
+    initNumbersDiv(frame.getReorderedNumbers(model.numbers), divReorderedNumbers);
 }
 
 function initNumbersDiv(numbers, div) {
-    divNumbers.innerHTML = "";
-    for (i of model.numbers) {
-        const div = createNumberDiv(i);
-        div.appendChild(document.createTextNode(i));
-        div.style.height = tileSidePx + "px";
-        div.className = "tile";
-        div.id = "tile-" + i;
-        div.style.lineHeight = tileSidePx + "px";
+    div.innerHTML = "";
+    for (i of numbers) {
+        const subdiv = createNumberDiv(i);
+        subdiv.appendChild(document.createTextNode(i));
+        subdiv.style.height = tileSidePx + "px";
+        subdiv.className = "tile";
+        subdiv.id = "tile-" + i;
+        subdiv.style.lineHeight = tileSidePx + "px";
         if (i > model.N / 2) {
-            div.style.color = "white";
+            subdiv.style.color = "white";
         }
-        divNumbers.appendChild(div);
+        div.appendChild(subdiv);
     }
 }
 
@@ -214,7 +214,7 @@ function shuffle() {
         });
     document.addEventListener('numbers changed',
         evt => {
-            initNumbers();
+            initNumbersDivs();
         });
     document.addEventListener('shortcuts changed',
         evt => {
@@ -235,5 +235,5 @@ function shuffle() {
     model.reset();
     toggleOffAddShortcut();
     initView();
-    initNumbers();
+    initNumbersDivs();
 });
