@@ -41,12 +41,9 @@ function twoDigits(n) {
 }
 
 function formatDuration(allMilliseconds) {
-    const remainingMillis = allMilliseconds % 1000;
-    const allSeconds = (allMilliseconds - remainingMillis) / 1000;
-    const remainingSeconds = allSeconds % 60;
-    const allMinutes = (allSeconds - remainingSeconds) / 60;
-    const remainingMinutes = allMinutes % 60;
-    const allHours = (allMinutes - remainingMinutes) / 60;
+    const {"remainingSmalls": remainingMillis, "allBigs": allSeconds} = getRemainingDurationUnits(allMilliseconds, 1000);
+    const {"remainingSmalls": remainingSeconds, "allBigs": allMinutes} = getRemainingDurationUnits(allSeconds, 60);
+    const {"remainingSmalls": remainingMinutes, "allBigs": allHours} = getRemainingDurationUnits(allMinutes, 60);
     let result = `${twoDigits(remainingSeconds)}.${threeDigits(remainingMillis)}`
     if (allMinutes !== 0) {
         result = `${twoDigits(remainingMinutes)}:` + result;
