@@ -74,6 +74,10 @@ describe('libm12', function () {
             chai.assert.deepEqual(frame12.I(range(12, 0)),
                 [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]);
         });
+        it('reorder', function() {
+            assert.deepEqual(frame12.getReorderedNumbers(range(12, 1)),
+                [ 1, 2, 12, 7, 4, 11, 6, 10, 8, 9, 5, 3]);
+        });
     });
     describe('getRandomMiString()', function() {
         it('', function() {
