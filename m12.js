@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let tileSidePx = tileSideWithMargin - 2;
     let inputSidePx = tileSidePx -2;
     let bigButtonWidth = Math.floor(tileSideWithMargin * model.N  / 2) - 2;
+    const white = getNumberBackgroundColor(0);
+    const blue = getNumberBackgroundColor(model.N - 1);
+    const backColors = range(model.N).map(getNumberBackgroundColor);
 
     const divGameContainer = document.querySelector('#game_container');
     const divNumbersHeader = document.querySelector('#numbers-header');
@@ -144,32 +147,27 @@ function initView() {
     initDivTime();
     initDivInfos();
 }
- 
+
+function getPosition(i) {
+    return tileSidePx * (i - 1);
+}
 
 function getNumberBackgroundColor(i) {
-    const pct = 98 - (i - 1) / (model.N -1) * 35;
+    const pct = 98 - (i - 1) / (model.N - 2) * 35;
     return `hsl(240, 100%, ${pct}%)`;
 }
 
 function createNumberDiv(i) {
     const div = document.createElement("div");
     div.style.width = tileSidePx + "px";
-    div.style.backgroundColor = getNumberBackgroundColor(i);
+    div.style.backgroundColor = backColors[i - 1];
     div.className = "tile";
     return div;
 }
 
-
 function initNumbersBorder(divBorder) {
     divBorder.style.height = `${Math.floor(tileSidePx / 2) + 2}px`;
     divBorder.style.width = (gameWidth -2) + "px";
-    divBorder.style.background = `linear-gradient(to right, hsl(240, 100%, 98%), hsl(240, 100%, 63%))`;
-    divBorder.style.margin = "1px";
-    divBorder.style.borderRadius = "3px";
-}
-
-function initNumbersDivs() {
-    initNumbersDiv(model.numbers, divNumbers);
 }
 
 function initNumbersDiv(numbers, div) {
@@ -188,6 +186,14 @@ function initNumbersDiv(numbers, div) {
     }
 }
 
+function updateNumbersDiv(numbers, div) {
+    numbers.toReversed().forEach(
+        (number, index) => {
+            div.insertAdjacentElement('afterBegin', div.querySelector(`#tile-${number}`));
+        }
+    );
+}
+
 function startChrono(evt) {
     model.chrono.start();
     document.removeEventListener('numbers changed', startChrono);
@@ -202,6 +208,8 @@ function shuffle() {
     document.addEventListener('numbers changed', startChrono);
 }
 
+    document.documentElement.style.setProperty('--white', white);
+    document.documentElement.style.setProperty('--blue', blue);
     buttonI.onclick = () => model.I();
     buttonM.onclick = () => model.M(); 
     buttonShuffle.onclick = shuffle;
@@ -220,13 +228,13 @@ function shuffle() {
         });
     document.addEventListener('numbers changed',
         evt => {
-            initNumbersDivs();
+            updateNumbersDiv(model.numbers, divNumbers);
         });
     document.addEventListener('shortcuts changed',
         evt => {
             divShortcuts.innerHTML = 
                 model.shortcuts
-                .map(shortcut => `<button> ${shortcut.name}</button>`)
+                .map(shortcut => `<button> ${shortcut.name} </button>`)
                 .join(''); 
             divShortcuts.childNodes.forEach(
                 (btn, i)  => { btn.onclick = () => model.applyString(model.shortcuts[i].action)});
@@ -241,5 +249,5 @@ function shuffle() {
     model.reset();
     toggleOffAddShortcut();
     initView();
-    initNumbersDivs();
+    initNumbersDiv(model.numbers, divNumbers);
 });
