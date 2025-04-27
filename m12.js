@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const buttonShuffle = document.querySelector('#shuffle');
     const divTime = document.querySelector('#time');
+    const divTitle = document.querySelector('#title');
     const divNumbers = document.querySelector('#numbers');
 
 
@@ -48,9 +49,14 @@ function initControl(control) {
 
 function initDivTime() {
     divTime.style.width = (gameWidth - 2) + "px";
-    divTime.style.backgroundColor = getNumberBackgroundColor(1);
     divTime.style.height = tileSidePx + "px";
     divTime.style.lineHeight = tileSidePx + "px";
+}
+
+function initDivTitle() {
+    divTitle.style.width = (gameWidth - 2) + "px";
+    divTitle.style.height = tileSidePx + "px";
+    divTitle.style.lineHeight = tileSidePx + "px";
 }
 
 function initDivInfos() {
@@ -69,6 +75,7 @@ function initView() {
     initControl(buttonShuffle);
 
     initDivTime();
+    initDivTitle();
     initDivInfos();
 }
 
@@ -95,6 +102,7 @@ function initNumbersBorder(divBorder) {
 }
 
 function initNumbersDiv(numbers, div) {
+    div.style.height = tileSideWithMargin + "px";
     div.innerHTML = "";
     for (i of numbers) {
         const subdiv = createNumberDiv(i);
@@ -111,10 +119,10 @@ function initNumbersDiv(numbers, div) {
 }
 
 function updateNumbersDiv(numbers, div) {
-    numbers.toReversed().forEach(
+    numbers.forEach(
         (number, index) => {
             const tile = div.querySelector(`#tile-${number}`);
-            div.insertAdjacentElement('afterBegin', tile);
+            tile.style.insetInlineStart = `${index * tileSideWithMargin}px`
         }
     );
 }
@@ -163,4 +171,5 @@ function shuffle() {
     );
     initView();
     initNumbersDiv(model.numbers, divNumbers);
+    updateNumbersDiv(model.numbers, divNumbers);
 });

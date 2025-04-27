@@ -12,8 +12,7 @@ body {
     margin-right: 0;
 }
 button {
-    border-width: 0px;
-    border-radius: 3px;
+    border-radius: 6px;
     margin: 1px;
 }
 
@@ -26,7 +25,10 @@ input {
 }
 
 .tile {
-    display: inline-block
+    display: inline-block;
+    position: absolute;
+    border-radius: 2px;
+    transition: inset-inline-start .5s
 }
 
 .game_container > div {
@@ -34,34 +36,29 @@ input {
 }
 
 .game_container > div > div {
-    border-radius: 3px;
+    border-radius: 2px;
     margin: 1px;
 }
 
 .number_border {
     background: linear-gradient(to right, var(--white), var(--blue));
     margin: 1px;
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
-#shortcuts {
-    display:none
+#time {
+    background-color: rgb(245, 245, 255);
 }
 
-#shortcuts_commands {
-    display:none
+#title {
+    background-color: rgb(245, 245, 255);
+    font-weight: bold;
 }
 
-#undo{
-    display:none
+#numbers {
+    /* establishes a positioning context / containing block
+     https://www.youtube.com/watch?v=jtuIS3CWpFo */
+    position: relative;
 }
-#input_shuffle {
-    display:none
-}
-#solution_commands {
-    display:none
-}
-#reset {
-    display:none
-}
+
 
