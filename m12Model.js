@@ -55,6 +55,7 @@ class Model {
         this.dispatcher = evtDispatcher;
         this.arrayM = makeMArray(this.N);
         this.arrayMInv = makeMInvArray(this.N);
+        this.previousNumbers = [];
         this.numbers = range(this.N, 1);
         this.lasts = [];
         this.solution = [];
@@ -135,11 +136,13 @@ class Model {
 
     I() {
         this.pushLasts('I');
+        this.previousNumbers = [...this.numbers];
         this.setNumbers(this.numbers.reverse());
     }
 
     M() {
         this.pushLasts('M');
+        this.previousNumbers = [...this.numbers];
         this.setNumbers(permute(this.numbers, this.arrayM));
     }
 
@@ -208,5 +211,3 @@ class Model {
     }
             
 };
-
-    
