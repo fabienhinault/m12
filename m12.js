@@ -1,6 +1,6 @@
 // import {range, permute, getRandomInt, pick, makeMArray, makeMInvArray, getComplementModulo, getIsInverseLength, getMsInverseLength, getGroupInverse, getSolution} from 'libm12';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const N = Number(new URL(window.location.toLocaleString()).searchParams.get('n'));
     let frame;
     if (N > 0 && N !== 12) {
@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const divTime = document.querySelector('#time');
     const divTitle = document.querySelector('#title');
     const divNumbers = document.querySelector('#numbers');
+    let tiles = [];
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
 function initBigButton(button) {
@@ -86,7 +91,7 @@ function createNumberDiv(i) {
     const div = document.createElement("div");
     div.style.width = tileSidePx + "px";
     div.style.backgroundColor = backColors[i - 1];
-    div.style.transition = `inset-inline-start ${transitionDurationMillis}ms`
+    div.style.transition = `left ${transitionDurationMillis}ms`
     div.className = "tile";
     return div;
 }
@@ -109,31 +114,87 @@ function initNumbersDiv(numbers, div) {
         if (i > model.N / 2) {
             subdiv.style.color = "white";
         }
+        tiles[i] = subdiv;
         div.appendChild(subdiv);
     }
 }
 
-function updateNumbersDiv(numbers, div) {
-    numbers.forEach(
-        (number, index) => {
-            const tile = div.querySelector(`#tile-${number}`);
-            tile.style.insetInlineStart = `${index * tileSideWithMargin}px`;
-            tile.style.transition = `inset-inline-start ${transitionDurationMillis}ms`
+async function updateNumbersDiv() {
+    const last = model.lasts.at(-1);
+    if (last === 'M') {
+        await updateNumbersDivM(model.previousNumbers, model.numbers);
+    } else {
+        await updateNumbersDivI(model.numbers);
+    }
+}
+ 
+async function updateNumbersDivI(numbers) {
+    const verticalTransitionDuration = 0.1 * transitionDurationMillis;
+    const horizontalTransitionDuration = 0.8 * transitionDurationMillis;
+    for (let index = 0; index < numbers.length; index++) {
+        let number = numbers[index];
+        const tile = tiles[number];
+        if (transitionDurationMillis >= 300) {
+            tile.style.transition = `left ${horizontalTransitionDuration}ms, top ${verticalTransitionDuration}ms`;
+        } else {
+            tile.style.transition = '';
         }
-    );
+        tile.style.left = `${index * tileSideWithMargin}px`;
+    }
+}
+
+async function updateNumbersDivM(oldNumbers, numbers) {
+    const verticalTransitionDuration = 0.1 * transitionDurationMillis;
+    const horizontalTransitionDuration = 0.8 * transitionDurationMillis;
+    const half = Math.floor(numbers.length / 2);
+    if (transitionDurationMillis >= 300) {
+        for (let index = 1; index < half; index++) {
+            let number = oldNumbers[index];
+            const tile = tiles[number];
+            tile.style.transition = `left ${horizontalTransitionDuration}ms, top ${verticalTransitionDuration}ms`;
+            tile.style.top = `${tileSidePx / 2}px`;
+        }
+        for (let index = half; index < numbers.length; index++) {
+            let number = oldNumbers[index];
+            const tile = tiles[number];
+            tile.style.transition = `left ${horizontalTransitionDuration}ms, top ${verticalTransitionDuration}ms`;
+            tile.style.top = `${-tileSidePx / 2}px`;
+        }
+        await sleep(verticalTransitionDuration);
+        for (let index = half; index < numbers.length; index++) {
+            let number = oldNumbers[index];
+            const tile = tiles[number];
+            tile.style.left = `${(numbers.length - 1 - index + half) * tileSideWithMargin}px`;
+        }
+        await sleep(horizontalTransitionDuration);
+    } else {
+        tiles.forEach(tile => {tile.style.transition = '';});
+    }
+    for (let index = 0; index < numbers.length; index++) {
+        let number = numbers[index];
+        const tile = tiles[number];
+        tile.style.left = `${index * tileSideWithMargin}px`;
+    }
+    await sleep(horizontalTransitionDuration);
+    for (let number of numbers) {
+        const tile = tiles[number];
+        tile.style.top = 0;
+    }
 }
 
 function startChrono(evt) {
     model.chrono.start();
     document.removeEventListener('numbers changed', startChrono);
-    document.addEventListener('solved', 
-        evt => {
-            divTime.innerHTML = formatDuration(evt.detail.time);
-        });
+    document.addEventListener('solved', showTime);
+}
+
+function showTime(evt) {
+    divTime.innerHTML = formatDuration(evt.detail.time);
+    document.removeEventListener('solved', showTime);
 }
 
 function shuffle() {
-    model.shuffle(100);
+    model.shuffleDefault();
     document.addEventListener('numbers changed', startChrono);
 }
 
@@ -173,11 +234,11 @@ function I() {
     );
     model.reset();
     document.addEventListener('numbers changed',
-        evt => {
-            updateNumbersDiv(model.numbers, divNumbers);
+        async evt => {
+            await updateNumbersDiv(model.numbers, divNumbers);
         }
     );
     initView();
     initNumbersDiv(model.numbers, divNumbers);
-    updateNumbersDiv(model.numbers, divNumbers);
+    await updateNumbersDivI(model.numbers, divNumbers);
 });
