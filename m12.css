@@ -28,7 +28,6 @@ input {
     display: inline-block;
     position: absolute;
     border-radius: 2px;
-    transition: inset-inline-start .5s
 }
 
 .game_container > div {
