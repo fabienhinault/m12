@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const N = Number(new URL(window.location.toLocaleString()).searchParams.get('n'));
-    let frame = undefined;
+    let frame;
     if (N > 0 && N !== 12) {
         frame = new Frame(N);
     } else {
@@ -10,13 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     const model = new Model(frame, document);
 
-    let showSolution = false;
-    let addingShortcut = false;
     let gameWidth = greatestMultipleLessThan(model.N, Math.min(516, window.screen.width));
     let tileSideWithMargin = gameWidth / model.N;
     let tileSidePx = tileSideWithMargin - 2;
-    let inputSidePx = tileSidePx -2;
     let bigButtonWidth = Math.floor(tileSideWithMargin * model.N  / 2) - 2;
+    let transitionDurationMillis = 1000;
+    let lastPush = 0;
     const white = getNumberBackgroundColor(0);
     const blue = getNumberBackgroundColor(model.N - 1);
     const backColors = range(model.N).map(getNumberBackgroundColor);
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const divNumbersFooter = document.querySelector('#numbers-footer');
     const divInfos = document.querySelector('#infos');
     const buttonI = document.querySelector('#I');
-    const imgI = document.querySelector('#I img');
     const buttonM = document.querySelector('#M');
 
     const buttonShuffle = document.querySelector('#shuffle');
@@ -79,10 +77,6 @@ function initView() {
     initDivInfos();
 }
 
-function getPosition(i) {
-    return tileSidePx * (i - 1);
-}
-
 function getNumberBackgroundColor(i) {
     const pct = 98 - (i - 1) / (model.N - 2) * 35;
     return `hsl(240, 100%, ${pct}%)`;
@@ -92,6 +86,7 @@ function createNumberDiv(i) {
     const div = document.createElement("div");
     div.style.width = tileSidePx + "px";
     div.style.backgroundColor = backColors[i - 1];
+    div.style.transition = `inset-inline-start ${transitionDurationMillis}ms`
     div.className = "tile";
     return div;
 }
@@ -104,7 +99,7 @@ function initNumbersBorder(divBorder) {
 function initNumbersDiv(numbers, div) {
     div.style.height = tileSideWithMargin + "px";
     div.innerHTML = "";
-    for (i of numbers) {
+    for (let i of numbers) {
         const subdiv = createNumberDiv(i);
         subdiv.appendChild(document.createTextNode(i));
         subdiv.style.height = tileSidePx + "px";
@@ -122,7 +117,8 @@ function updateNumbersDiv(numbers, div) {
     numbers.forEach(
         (number, index) => {
             const tile = div.querySelector(`#tile-${number}`);
-            tile.style.insetInlineStart = `${index * tileSideWithMargin}px`
+            tile.style.insetInlineStart = `${index * tileSideWithMargin}px`;
+            tile.style.transition = `inset-inline-start ${transitionDurationMillis}ms`
         }
     );
 }
@@ -141,25 +137,37 @@ function shuffle() {
     document.addEventListener('numbers changed', startChrono);
 }
 
+function updateTransitionDuration() {
+    transitionDurationMillis = Math.min(transitionDurationMillis, Date.now() - lastPush);
+    lastPush = Date.now();
+}
+
+function M() {
+    updateTransitionDuration();
+    model.M();
+}
+
+
+function I() {
+    updateTransitionDuration();
+    model.I();
+}
     document.documentElement.style.setProperty('--white', white);
     document.documentElement.style.setProperty('--blue', blue);
-    buttonI.onclick = () => model.I();
-    buttonM.onclick = () => model.M(); 
+    buttonI.onclick = () => I();
+    buttonM.onclick = () => M(); 
     buttonShuffle.onclick = shuffle;
 
     document.addEventListener('keypress',
         evt => {
             const key = evt.key.toUpperCase();
-            if (['I', 'M'].includes(key)) {
-                model[key]();
+            // M for right index
+            if (['J', 'M'].includes(key)) {
+                M();
             }
             // I for left index
-            if ('F' === key) {
-                model.I();
-            }
-            // M for right index
-            if ('J' === key) {
-                model.M();
+            if (['F', 'I'].includes(key)) {
+                I();
             }
         }
     );
