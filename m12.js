@@ -206,22 +206,22 @@ function showTime(evt) {
 
 function showIntermediateTime() {
     if (!timeShown) {
+        nMoves += 1;
         divTime.innerHTML = `<span class="grey">${nMoves} ${formatDuration(Date.now() - model.chrono.startTime, ',')}</span>`;
     }
 }
 
 async function shuffle() {
-    nMoves=0;
+    nMoves = 0;
+    timeShown = false;
     divTime.innerHTML='<span class="larger_bold">↑</span> Remettez les dans l\'ordre avec ces 2 boutons <span class="larger_bold">↑</span>';
     model.shuffleDefault();
-    await updateNumbersDivI(model.numbers, divNumbers);
     document.addEventListener('numbers changed', startChrono);
-    document.addEventListener('numbers changed', showIntermediateTime);
     buttonI.focus();
+    await updateNumbersDivI(model.numbers, divNumbers);
 }
 
 function updateTransitionDuration() {
-    nMoves += 1;
     transitionDurationMillis = Math.min(transitionDurationMillis, Date.now() - lastPush);
     lastPush = Date.now();
 }
@@ -229,12 +229,14 @@ function updateTransitionDuration() {
 function M() {
     updateTransitionDuration();
     model.M();
+    showIntermediateTime();
 }
 
 
 function I() {
     updateTransitionDuration();
     model.I();
+    showIntermediateTime();
 }
     document.documentElement.style.setProperty('--white', white);
     document.documentElement.style.setProperty('--blue', blue);
