@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     const divTitle = document.querySelector('#title');
     const divNumbers = document.querySelector('#numbers');
     let tiles = [];
+    let nMoves = 0;
+    let timeShown = false;
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -144,10 +146,11 @@ async function updateNumbersDivI(numbers) {
 }
 
 async function updateNumbersDivM(oldNumbers, numbers) {
-    const verticalTransitionDuration = 0.1 * transitionDurationMillis;
+    const startTransitionDurationMillis = transitionDurationMillis;
     const horizontalTransitionDuration = 0.8 * transitionDurationMillis;
-    const half = Math.floor(numbers.length / 2);
     if (transitionDurationMillis >= 300) {
+        const verticalTransitionDuration = 0.1 * transitionDurationMillis;
+        const half = Math.floor(numbers.length / 2);
         for (let index = 1; index < half; index++) {
             let number = oldNumbers[index];
             const tile = tiles[number];
@@ -166,16 +169,21 @@ async function updateNumbersDivM(oldNumbers, numbers) {
             const tile = tiles[number];
             tile.style.left = `${(numbers.length - 1 - index + half) * tileSideWithMargin}px`;
         }
-        await sleep(horizontalTransitionDuration);
+        if (transitionDurationMillis === startTransitionDurationMillis) {
+            await sleep(horizontalTransitionDuration);
+        }
     } else {
         tiles.forEach(tile => {tile.style.transition = '';});
     }
     for (let index = 0; index < numbers.length; index++) {
-        let number = numbers[index];
+        // risk of 2 updateNumbersDivM() colliding, so go back to the model.
+        let number = model.numbers[index];
         const tile = tiles[number];
         tile.style.left = `${index * tileSideWithMargin}px`;
     }
-    await sleep(horizontalTransitionDuration);
+    if (transitionDurationMillis >= 300 && transitionDurationMillis === startTransitionDurationMillis) {
+        await sleep(horizontalTransitionDuration);
+    }
     for (let number of numbers) {
         const tile = tiles[number];
         tile.style.top = 0;
@@ -183,22 +191,37 @@ async function updateNumbersDivM(oldNumbers, numbers) {
 }
 
 function startChrono(evt) {
+    nMoves = 0;
     model.chrono.start();
     document.removeEventListener('numbers changed', startChrono);
     document.addEventListener('solved', showTime);
 }
 
 function showTime(evt) {
-    divTime.innerHTML = formatDuration(evt.detail.time);
+    timeShown = true;
+    divTime.innerHTML = `${nMoves} ${formatDuration(evt.detail.time, ',')}`;
     document.removeEventListener('solved', showTime);
+    document.removeEventListener('numbers changed', showIntermediateTime);
 }
 
-function shuffle() {
+function showIntermediateTime() {
+    if (!timeShown) {
+        divTime.innerHTML = `<span class="grey">${nMoves} ${formatDuration(Date.now() - model.chrono.startTime, ',')}</span>`;
+    }
+}
+
+async function shuffle() {
+    nMoves=0;
+    divTime.innerHTML='<span class="larger_bold">↑</span> Remettez les dans l\'ordre avec ces 2 boutons <span class="larger_bold">↑</span>';
     model.shuffleDefault();
+    await updateNumbersDivI(model.numbers, divNumbers);
     document.addEventListener('numbers changed', startChrono);
+    document.addEventListener('numbers changed', showIntermediateTime);
+    buttonI.focus();
 }
 
 function updateTransitionDuration() {
+    nMoves += 1;
     transitionDurationMillis = Math.min(transitionDurationMillis, Date.now() - lastPush);
     lastPush = Date.now();
 }
@@ -238,7 +261,9 @@ function I() {
             await updateNumbersDiv(model.numbers, divNumbers);
         }
     );
+
     initView();
     initNumbersDiv(model.numbers, divNumbers);
     await updateNumbersDivI(model.numbers, divNumbers);
+    buttonShuffle.focus();
 });

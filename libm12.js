@@ -40,11 +40,11 @@ function twoDigits(n) {
     return n.toLocaleString('fr', {minimumIntegerDigits: 2, useGrouping:false});
 }
 
-function formatDuration(allMilliseconds) {
+function formatDuration(allMilliseconds, decimalSeparator) {
     const {"remainingSmalls": remainingMillis, "allBigs": allSeconds} = getRemainingDurationUnits(allMilliseconds, 1000);
     const {"remainingSmalls": remainingSeconds, "allBigs": allMinutes} = getRemainingDurationUnits(allSeconds, 60);
     const {"remainingSmalls": remainingMinutes, "allBigs": allHours} = getRemainingDurationUnits(allMinutes, 60);
-    let result = `${twoDigits(remainingSeconds)}.${threeDigits(remainingMillis)}`
+    let result = `${twoDigits(remainingSeconds)}${decimalSeparator}${threeDigits(remainingMillis)}`
     if (allMinutes !== 0) {
         result = `${twoDigits(remainingMinutes)}:` + result;
     }

@@ -185,10 +185,7 @@ class Model {
     }
 
     shuffleDefault() {
-        this.shuffleNTimes(getRandomInt(10,100));
-        this.I();
-        return this.dispatcher.dispatchEvent(
-            new CustomEvent("numbers changed", {detail: {numbers: this.numbers}}));
+        this.shuffleNTimes(getRandomInt(100, 200));
     }
 
     shuffleNTimes(nbTimes) {
